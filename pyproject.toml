@@ -4,20 +4,22 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bagley"
-version = "7.0.0"
-description = "Bagley v7 - Ultimate All-in-One Local AI System"
+version = "7.01"
+description = "Bagley v7.01 Genesis - Ultimate AI Assistant with Reasoning, Memory, Emotion & Anti-Hallucination"
 readme = "README.md"
-requires-python = ">=3.11"
-license = {text = "Proprietary"}
+requires-python = ">=3.10"
+license = {text = "MIT"}
 authors = [
     {name = "Bagley Engineering Team"}
 ]
-keywords = ["ai", "llm", "image-generation", "video-generation", "tts", "assistant"]
+keywords = ["ai", "llm", "reasoning", "memory", "emotion", "anti-hallucination", "assistant"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
 ]
 
 dependencies = [

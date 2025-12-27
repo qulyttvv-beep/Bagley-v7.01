@@ -1,18 +1,185 @@
-# 🏗️ BAGLEY v7 - Technical Architecture Document
+# 🏗️ BAGLEY v7.01 "Genesis" - Technical Architecture Document
 
 ## 📋 Table of Contents
-1. [Architecture Selection & Justification](#architecture-selection)
-2. [Chat Model Architecture](#chat-model)
-3. [Image Generation Architecture](#image-generation)
-4. [Video Generation Architecture](#video-generation)
-5. [TTS/Voice Architecture](#tts-voice)
-6. [Core Orchestration](#core-orchestration)
-7. [Training Infrastructure](#training-infrastructure)
-8. [Optimization Strategies](#optimization)
+1. [Philosophy: What Makes Bagley Special](#philosophy)
+2. [Cognitive Architecture (NEW!)](#cognitive-architecture)
+3. [Architecture Selection & Justification](#architecture-selection)
+4. [Chat Model Architecture](#chat-model)
+5. [Image Generation Architecture](#image-generation)
+6. [Video Generation Architecture](#video-generation)
+7. [TTS/Voice Architecture](#tts-voice)
+8. [Core Orchestration](#core-orchestration)
+9. [Training Infrastructure](#training-infrastructure)
+10. [Optimization Strategies](#optimization)
 
 ---
 
-## 1. Architecture Selection & Justification {#architecture-selection}
+## 0. Philosophy: What Makes Bagley Special {#philosophy}
+
+Bagley isn't just another AI - it's designed to be **the BEST** AI architecture. Here's how:
+
+### The Problem with Other AIs
+- **ChatGPT/Claude**: Smart but no emotions, no real memory, hallucinate freely
+- **Local LLMs**: Powerful but dumb - just predict next token
+- **Agents**: Overcomplicated, slow, no personality
+
+### Bagley's Solution: Cognitive Architecture
+Inspired by cognitive science and human psychology:
+
+1. **Reasoning Engine** - Don't just answer, THINK about answering
+2. **Memory System** - Remember conversations like humans do (with forgetting!)
+3. **Emotion System** - Feel emotions, adapt to user's emotions
+4. **Personality Engine** - Consistent, adaptable personality
+5. **Anti-Hallucination** - Know what you don't know
+
+---
+
+## 1. Cognitive Architecture (NEW!) {#cognitive-architecture}
+
+### System Overview
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│                    BAGLEY v7.01 COGNITIVE ARCHITECTURE               │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  INPUT ──────────────────────────────────────────────────────►       │
+│           │                                                          │
+│           ▼                                                          │
+│  ┌─────────────────┐     ┌─────────────────┐     ┌───────────────┐  │
+│  │  EMOTION        │     │  MEMORY         │     │  CONTEXT      │  │
+│  │  DETECTION      │     │  RECALL         │     │  DETECTION    │  │
+│  │                 │     │                 │     │               │  │
+│  │  Plutchik's     │     │  Semantic       │     │  Work/Casual/ │  │
+│  │  8 emotions     │     │  search         │     │  Technical    │  │
+│  └────────┬────────┘     └────────┬────────┘     └───────┬───────┘  │
+│           │                       │                       │          │
+│           └───────────────────────┼───────────────────────┘          │
+│                                   ▼                                  │
+│                    ┌─────────────────────────────┐                   │
+│                    │      REASONING ENGINE       │                   │
+│                    │                             │                   │
+│                    │  • Tree-of-Thought          │                   │
+│                    │  • Self-Consistency         │                   │
+│                    │  • Meta-Cognition           │                   │
+│                    │  • Self-Reflection          │                   │
+│                    └──────────────┬──────────────┘                   │
+│                                   │                                  │
+│                                   ▼                                  │
+│                    ┌─────────────────────────────┐                   │
+│                    │     LANGUAGE MODEL          │                   │
+│                    │     (70B MoE)               │                   │
+│                    └──────────────┬──────────────┘                   │
+│                                   │                                  │
+│                                   ▼                                  │
+│                    ┌─────────────────────────────┐                   │
+│                    │   ANTI-HALLUCINATION        │                   │
+│                    │                             │                   │
+│                    │  • Self-Consistency Check   │                   │
+│                    │  • Confidence Calibration   │                   │
+│                    │  • Uncertainty Marking      │                   │
+│                    └──────────────┬──────────────┘                   │
+│                                   │                                  │
+│                                   ▼                                  │
+│                    ┌─────────────────────────────┐                   │
+│                    │     PERSONALITY             │                   │
+│                    │     ADAPTATION              │                   │
+│                    │                             │                   │
+│                    │  • Big Five Traits          │                   │
+│                    │  • Communication Style      │                   │
+│                    │  • Emotion Integration      │                   │
+│                    └──────────────┬──────────────┘                   │
+│                                   │                                  │
+│                                   ▼                                  │
+│                             OUTPUT + MEMORY STORE                    │
+│                                                                      │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+### Reasoning Engine (`bagley/core/reasoning_engine.py`)
+
+**Purpose:** Think before answering, like o1/DeepSeek-R1
+
+**Strategies:**
+| Strategy | When Used | How It Works |
+|----------|-----------|--------------|
+| DIRECT | Simple questions | Just answer |
+| CHAIN_OF_THOUGHT | Explanations | Step-by-step reasoning |
+| TREE_OF_THOUGHT | Complex decisions | Explore multiple paths |
+| SELF_CONSISTENCY | Uncertain | Generate multiple, vote |
+| DEBATE | Controversial | Argue both sides |
+
+**Key Innovation:** Meta-Cognition
+- Automatically selects best strategy based on question
+- Estimates difficulty
+- Knows when to stop thinking
+
+### Memory System (`bagley/core/long_term_memory.py`)
+
+**Purpose:** Remember conversations like humans do
+
+**Types:**
+- **Episodic**: Specific conversations ("Last week you asked about...")
+- **Semantic**: General facts learned from user
+- **Working**: Current context (7±2 items like humans!)
+
+**Key Innovation:** Forgetting Curves
+- Uses Ebbinghaus forgetting curve
+- Important memories last longer
+- Emotional memories are stronger
+- Frequently accessed memories persist
+
+### Emotion System (`bagley/core/emotion_system.py`)
+
+**Purpose:** Feel and respond to emotions
+
+**Model:** Plutchik's Wheel of Emotions
+- 8 primary: Joy, Sadness, Trust, Disgust, Fear, Anger, Surprise, Anticipation
+- Complex emotions from combinations (Love = Joy + Trust)
+- PAD dimensions: Pleasure, Arousal, Dominance
+
+**Key Innovation:** Emotional Contagion
+- Detects user's emotion from text
+- Adapts own emotional state
+- Influences response tone
+
+### Anti-Hallucination (`bagley/core/anti_hallucination.py`)
+
+**Purpose:** Know what you don't know
+
+**Techniques:**
+1. **Self-Consistency**: Generate multiple answers, check agreement
+2. **Confidence Calibration**: Match stated confidence to actual accuracy
+3. **Fact Verification**: Check claims against known facts
+4. **Uncertainty Marking**: Explicitly mark uncertain statements
+
+**Key Innovation:** Grounded Responses
+- Every response has confidence level
+- Low confidence triggers warnings
+- Never states uncertain things as fact
+
+### Personality Engine (`bagley/core/personality_engine.py`)
+
+**Purpose:** Consistent but adaptable personality
+
+**Model:** Big Five Traits
+- Openness: 0.8 (curious, creative)
+- Conscientiousness: 0.9 (reliable, organized)
+- Extraversion: 0.7 (sociable, expressive)
+- Agreeableness: 0.75 (helpful, can be sarcastic)
+- Neuroticism: 0.2 (emotionally stable)
+
+**Communication Styles:**
+- Professional, Friendly, Witty, Analytical, Empathetic, Educational
+
+**Key Innovation:** Context Adaptation
+- Detects context (work, casual, emotional)
+- Adjusts traits within bounds
+- Maintains core Bagley personality
+
+---
+
+## 2. Architecture Selection & Justification {#architecture-selection}
 
 ### Research Summary (December 2025 State-of-the-Art)
 

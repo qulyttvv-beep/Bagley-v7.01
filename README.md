@@ -112,14 +112,43 @@ python -m bagley.main --ui
 python -m bagley.main --chat
 ```
 
+### Python API
+```python
+from bagley import Bagley, BagleyConfig, create_bagley
+
+# Quick start - one line!
+bagley = create_bagley()
+response = bagley.chat("Hello Bagley!")
+print(response.content)  # "Ah, hello there! How may I assist you today?"
+
+# Full configuration
+config = BagleyConfig(
+    enable_reasoning=True,       # Tree-of-Thought reasoning
+    enable_memory=True,          # Long-term memory
+    enable_emotion=True,         # Human-like emotions
+    enable_anti_hallucination=True,  # Trustworthy AI
+    temperature=0.7,
+)
+bagley = Bagley(config)
+
+# Chat with reasoning
+response = bagley.chat(
+    "What's the best sorting algorithm for 10 million items?",
+    require_reasoning=True,  # Extended thinking
+)
+print(f"Answer: {response.content}")
+print(f"Confidence: {response.confidence:.0%}")
+print(f"Strategy: {response.reasoning_used}")
+
+# Check status
+status = bagley.get_status()
+print(f"Version: {status['version']}")
+print(f"Emotion: {status['current_emotion']}")
+```
+
 ### API Server
 ```bash
 python -m bagley.main --serve --port 8000
-```
-
-### Training
-```bash
-python -m bagley.main --train chat --config config.yaml
 ```
 
 ---
@@ -127,28 +156,111 @@ python -m bagley.main --train chat --config config.yaml
 ## 🏗️ Architecture
 
 ```
+┌─────────────────────────────────────────────────────────────┐
+│                     BAGLEY v7.01 "Genesis"                  │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐      │
+│   │  REASONING  │   │ ANTI-HALL.  │   │   EMOTION   │      │
+│   │   ENGINE    │   │   SYSTEM    │   │   SYSTEM    │      │
+│   │             │   │             │   │             │      │
+│   │ • Tree of   │   │ • Self-     │   │ • Plutchik  │      │
+│   │   Thought   │   │   Consisten │   │   Wheel     │      │
+│   │ • Meta-     │   │ • Fact      │   │ • PAD Model │      │
+│   │   Cognition │   │   Verify    │   │ • Memory    │      │
+│   └──────┬──────┘   └──────┬──────┘   └──────┬──────┘      │
+│          │                 │                  │             │
+│          └─────────────────┼──────────────────┘             │
+│                            ▼                                │
+│                   ┌─────────────────┐                       │
+│                   │   PERSONALITY   │                       │
+│                   │     ENGINE      │                       │
+│                   │                 │                       │
+│                   │ • Big Five      │                       │
+│                   │ • Comm Styles   │                       │
+│                   │ • Adaptation    │                       │
+│                   └────────┬────────┘                       │
+│                            │                                │
+│          ┌─────────────────┼─────────────────┐              │
+│          ▼                 ▼                 ▼              │
+│   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐      │
+│   │   MEMORY    │   │    CHAT     │   │   MODELS    │      │
+│   │   SYSTEM    │   │   MODEL     │   │   SUITE     │      │
+│   │             │   │             │   │             │      │
+│   │ • Long-term │   │ • 70B MoE   │   │ • Image     │      │
+│   │ • Working   │   │ • Extended  │   │ • Video     │      │
+│   │ • Forgetting│   │   Context   │   │ • TTS       │      │
+│   └─────────────┘   └─────────────┘   └─────────────┘      │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Core Files
+```
 bagley/
-├── core/                 # Brain & orchestration
-│   ├── brain.py         # Unified model routing
+├── __init__.py          # Main exports
+├── core/
+│   ├── bagley.py        # 🤖 Unified Bagley class (NEW!)
+│   ├── reasoning_engine.py   # 🧠 Tree-of-Thought (NEW!)
+│   ├── long_term_memory.py   # 🔮 Forgetting curves (NEW!)
+│   ├── personality_engine.py # 🎭 Big Five traits (NEW!)
+│   ├── emotion_system.py     # 💖 Plutchik's wheel (NEW!)
+│   ├── anti_hallucination.py # 🛡️ Fact verification (NEW!)
+│   ├── brain.py         # Original unified brain
 │   ├── orchestrator.py  # Central coordinator
-│   ├── memory.py        # Infinite context memory
-│   ├── personality.py   # Bagley's chaotic personality
+│   ├── memory.py        # Context memory
 │   └── infinite_context.py  # Streaming KV cache
 │
 ├── models/              # AI models
 │   ├── chat/           # 70B MoE language model
 │   ├── image/          # 12B DiT image generator
 │   ├── video/          # 14B video generator
-│   ├── tts/            # Text-to-speech + cloning
-│   └── upscaler.py     # Real-ESRGAN style upscaler
+│   └── tts/            # Text-to-speech + cloning
 │
-├── training/           # Training infrastructure
-│   ├── flexible_trainer.py  # 1 GPU to N GPUs
-│   ├── pipeline.py     # Smart data processing
-│   └── monitor.py      # GPU monitoring
-│
-└── ui/                 # Desktop application
-    └── app_v2.py       # Qt-based UI
+└── training/           # Training infrastructure
+```
+
+---
+
+## 🧠 Advanced Features
+
+### 🌳 Tree-of-Thought Reasoning
+Bagley explores multiple reasoning paths before answering:
+```python
+response = bagley.chat(
+    "Should I learn Rust or Go for systems programming?",
+    require_reasoning=True,
+    reasoning_strategy=ReasoningStrategy.TREE_OF_THOUGHT,
+)
+# Explores pros/cons of each, considers your needs, gives reasoned answer
+```
+
+### 🔮 Long-term Memory
+Bagley remembers across conversations:
+```python
+# First conversation
+bagley.chat("My name is Alex and I love Python", user_id="alex123")
+
+# Later (even after restart)
+response = bagley.chat("What's my favorite language?", user_id="alex123")
+# "You mentioned you love Python, Alex!"
+```
+
+### 💖 Emotional Intelligence
+Bagley adapts to your emotional state:
+```python
+# Bagley detects frustration and responds empathetically
+response = bagley.chat("Nothing works! I've been debugging for hours!")
+# "I hear your frustration - debugging can be exhausting. Let's work through this together..."
+```
+
+### 🛡️ Anti-Hallucination
+Bagley tells you when it's uncertain:
+```python
+response = bagley.chat("What happened at the 2025 Super Bowl?")
+if not response.verified:
+    print("Warning:", response.warnings)
+# Bagley acknowledges uncertainty about future events
 ```
 
 ---
