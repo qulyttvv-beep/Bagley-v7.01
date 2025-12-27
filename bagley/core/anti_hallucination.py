@@ -20,7 +20,8 @@ WHY THIS MATTERS:
 - Users can TRUST Bagley's answers
 """
 
-from typing import Optional, List, Dict, Any, Tuple, Set
+from __future__ import annotations
+from typing import Optional, List, Dict, Any, Tuple, Set, Union, TYPE_CHECKING
 from dataclasses import dataclass, field
 from enum import Enum
 import logging
@@ -28,6 +29,12 @@ import math
 import hashlib
 import json
 from collections import defaultdict
+
+# Type alias for tensor - will be torch.Tensor when available, Any otherwise
+if TYPE_CHECKING:
+    from torch import Tensor
+else:
+    Tensor = Any
 
 # Torch imports (required for neural components)
 try:
@@ -37,9 +44,9 @@ try:
     TORCH_AVAILABLE = True
 except ImportError:
     TORCH_AVAILABLE = False
-    torch = None
-    nn = None
-    F = None
+    torch = None  # type: ignore
+    nn = None  # type: ignore
+    F = None  # type: ignore
 
 logger = logging.getLogger(__name__)
 
@@ -239,10 +246,10 @@ class ConfidenceCalibrator(nn.Module):
     
     def forward(
         self,
-        hidden_states: torch.Tensor,
-        logits: torch.Tensor,
-        attention_weights: Optional[torch.Tensor] = None,
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+        hidden_states: Tensor,
+        logits: Tensor,
+        attention_weights: Optional[Tensor] = None,
+    ) -> Tuple[Tensor, Tensor]:
         """
         Compute calibrated confidence and uncertainty decomposition
         
@@ -265,10 +272,10 @@ class ConfidenceCalibrator(nn.Module):
     
     def _extract_features(
         self,
-        hidden_states: torch.Tensor,
-        logits: torch.Tensor,
-        attention_weights: Optional[torch.Tensor],
-    ) -> torch.Tensor:
+        hidden_states: Tensor,
+        logits: Tensor,
+        attention_weights: Optional[Tensor],
+    ) -> Tensor:
         """Extract features for calibration"""
         features = []
         
@@ -518,9 +525,9 @@ class ContrastiveDecoder:
     
     def decode(
         self,
-        expert_logits: torch.Tensor,
-        amateur_logits: torch.Tensor,
-    ) -> torch.Tensor:
+        expert_logits: Tensor,
+        amateur_logits: Tensor,
+    ) -> Tensor:
         """
         Contrastive decoding: amplify expert, suppress amateur
         
@@ -610,8 +617,8 @@ class AntiHallucinationSystem:
         response: str,
         alternative_responses: Optional[List[str]] = None,
         reasoning_steps: Optional[List[str]] = None,
-        hidden_states: Optional[torch.Tensor] = None,
-        logits: Optional[torch.Tensor] = None,
+        hidden_states: Optional[Tensor] = None,
+        logits: Optional[Tensor] = None,
     ) -> GroundedResponse:
         """
         Comprehensive verification of a response
@@ -790,9 +797,9 @@ class HallucinationDetector(nn.Module):
     
     def forward(
         self,
-        hidden_states: torch.Tensor,  # [batch, seq, hidden]
-        attention_weights: torch.Tensor,  # [batch, heads, seq, seq]
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+        hidden_states: Tensor,  # [batch, seq, hidden]
+        attention_weights: Tensor,  # [batch, heads, seq, seq]
+    ) -> Tuple[Tensor, Tensor]:
         """
         Detect if response contains hallucinations
         
