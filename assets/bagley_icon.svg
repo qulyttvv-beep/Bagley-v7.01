@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  BAGLEY V7 ICON
+  Inspired by Bagley from Watch Dogs: Legion
+  A friendly AI assistant with geometric digital aesthetic
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Gradient for the digital glow effect -->
+    <linearGradient id="cyberGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00f5ff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#0080ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8000ff;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Inner glow gradient -->
+    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#00f5ff;stop-opacity:0" />
+    </radialGradient>
+    
+    <!-- Background gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f0f1a;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Scanline pattern -->
+    <pattern id="scanlines" patternUnits="userSpaceOnUse" width="4" height="4">
+      <line x1="0" y1="0" x2="4" y2="0" stroke="#00f5ff" stroke-opacity="0.1" stroke-width="1"/>
+    </pattern>
+    
+    <!-- Glow filter -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Strong glow -->
+    <filter id="strongGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="250" fill="url(#bgGrad)" stroke="url(#cyberGlow)" stroke-width="4"/>
+  
+  <!-- Scanline overlay -->
+  <circle cx="256" cy="256" r="246" fill="url(#scanlines)"/>
+  
+  <!-- Outer hexagon frame (digital/geometric aesthetic) -->
+  <polygon 
+    points="256,40 430,130 430,330 256,420 82,330 82,130" 
+    fill="none" 
+    stroke="url(#cyberGlow)" 
+    stroke-width="3"
+    filter="url(#glow)"
+    opacity="0.6"
+  />
+  
+  <!-- Inner geometric pattern -->
+  <polygon 
+    points="256,80 390,155 390,305 256,380 122,305 122,155" 
+    fill="none" 
+    stroke="#00f5ff" 
+    stroke-width="1.5"
+    opacity="0.4"
+  />
+  
+  <!-- Main face circle (Bagley's "head") -->
+  <circle 
+    cx="256" cy="230" r="120" 
+    fill="#0a0a15" 
+    stroke="url(#cyberGlow)" 
+    stroke-width="3"
+    filter="url(#glow)"
+  />
+  
+  <!-- Face inner glow -->
+  <circle cx="256" cy="230" r="115" fill="url(#innerGlow)"/>
+  
+  <!-- Left eye (digital rectangle style like Watch Dogs Bagley) -->
+  <rect 
+    x="185" y="200" width="50" height="25" rx="5"
+    fill="#00f5ff"
+    filter="url(#strongGlow)"
+  />
+  <!-- Left eye highlight -->
+  <rect x="190" y="205" width="15" height="10" rx="2" fill="#ffffff" opacity="0.8"/>
+  
+  <!-- Right eye -->
+  <rect 
+    x="277" y="200" width="50" height="25" rx="5"
+    fill="#00f5ff"
+    filter="url(#strongGlow)"
+  />
+  <!-- Right eye highlight -->
+  <rect x="282" y="205" width="15" height="10" rx="2" fill="#ffffff" opacity="0.8"/>
+  
+  <!-- Friendly smile (curved line) -->
+  <path 
+    d="M 200 280 Q 256 320 312 280" 
+    fill="none" 
+    stroke="#00f5ff" 
+    stroke-width="4"
+    stroke-linecap="round"
+    filter="url(#glow)"
+  />
+  
+  <!-- Digital circuit lines (left side) -->
+  <g stroke="#00f5ff" stroke-width="2" opacity="0.5" filter="url(#glow)">
+    <line x1="136" y1="230" x2="100" y2="230"/>
+    <line x1="100" y1="230" x2="100" y2="180"/>
+    <line x1="100" y1="180" x2="120" y2="180"/>
+    <circle cx="120" cy="180" r="4" fill="#00f5ff"/>
+    
+    <line x1="136" y1="260" x2="90" y2="260"/>
+    <line x1="90" y1="260" x2="90" y2="300"/>
+    <circle cx="90" cy="300" r="4" fill="#00f5ff"/>
+  </g>
+  
+  <!-- Digital circuit lines (right side) -->
+  <g stroke="#00f5ff" stroke-width="2" opacity="0.5" filter="url(#glow)">
+    <line x1="376" y1="230" x2="412" y2="230"/>
+    <line x1="412" y1="230" x2="412" y2="180"/>
+    <line x1="412" y1="180" x2="392" y2="180"/>
+    <circle cx="392" cy="180" r="4" fill="#00f5ff"/>
+    
+    <line x1="376" y1="260" x2="422" y2="260"/>
+    <line x1="422" y1="260" x2="422" y2="300"/>
+    <circle cx="422" cy="300" r="4" fill="#00f5ff"/>
+  </g>
+  
+  <!-- "V7" badge at bottom -->
+  <g filter="url(#glow)">
+    <rect x="206" y="370" width="100" height="40" rx="8" fill="#0a0a15" stroke="url(#cyberGlow)" stroke-width="2"/>
+    <text x="256" y="398" text-anchor="middle" fill="#00f5ff" font-family="Arial, sans-serif" font-weight="bold" font-size="24">V7</text>
+  </g>
+  
+  <!-- Decorative dots (data points) -->
+  <g fill="#00f5ff" filter="url(#glow)">
+    <circle cx="150" cy="120" r="3" opacity="0.6"/>
+    <circle cx="170" cy="100" r="2" opacity="0.4"/>
+    <circle cx="130" cy="140" r="2" opacity="0.5"/>
+    
+    <circle cx="362" cy="120" r="3" opacity="0.6"/>
+    <circle cx="342" cy="100" r="2" opacity="0.4"/>
+    <circle cx="382" cy="140" r="2" opacity="0.5"/>
+    
+    <circle cx="150" cy="340" r="2" opacity="0.4"/>
+    <circle cx="362" cy="340" r="2" opacity="0.4"/>
+  </g>
+  
+  <!-- Antenna/signal indicator at top -->
+  <g filter="url(#strongGlow)">
+    <line x1="256" y1="40" x2="256" y2="70" stroke="#00f5ff" stroke-width="3"/>
+    <circle cx="256" cy="35" r="8" fill="#00f5ff"/>
+    <circle cx="256" cy="35" r="4" fill="#ffffff"/>
+  </g>
+</svg>

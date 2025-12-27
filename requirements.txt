@@ -1,0 +1,55 @@
+# 🤖 Bagley v7 - Requirements
+
+# Core ML
+torch>=2.2.0
+safetensors>=0.4.0
+einops>=0.7.0
+transformers>=4.38.0  # For tokenizers only
+
+# Training
+deepspeed>=0.13.0
+accelerate>=0.27.0
+datasets>=2.17.0
+wandb>=0.16.0
+
+# Optimization
+flash-attn>=2.5.0;platform_system=="Linux"
+xformers>=0.0.24;platform_system=="Linux"
+bitsandbytes>=0.42.0
+
+# UI
+PySide6>=6.6.0
+
+# API Server
+fastapi>=0.109.0
+uvicorn>=0.27.0
+pydantic>=2.5.0
+
+# Audio
+torchaudio>=2.2.0
+soundfile>=0.12.0
+librosa>=0.10.0
+
+# Image/Video
+torchvision>=0.17.0
+Pillow>=10.2.0
+av>=11.0.0
+opencv-python>=4.9.0
+
+# Multimodal
+tiktoken>=0.6.0
+sentencepiece>=0.2.0
+
+# Web/Browser
+aiohttp>=3.9.0
+beautifulsoup4>=4.12.0
+
+# System
+psutil>=5.9.0
+
+# Utilities
+numpy>=1.26.0
+scipy>=1.12.0
+tqdm>=4.66.0
+PyYAML>=6.0.0
+python-dotenv>=1.0.0

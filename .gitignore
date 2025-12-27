@@ -1,0 +1,187 @@
+# ============================================================================
+# BAGLEY V7 GITIGNORE
+# ============================================================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv/
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Testing
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# ============================================================================
+# ML/AI SPECIFIC
+# ============================================================================
+
+# Model weights (HUGE files - download separately)
+*.bin
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+*.h5
+*.onnx
+models/
+!bagley/models/
+
+# Training outputs
+outputs/
+runs/
+checkpoints/
+*.checkpoint
+
+# Datasets (download separately)
+data/
+datasets/
+training_data/
+*.parquet
+*.arrow
+
+# Logs
+logs/
+*.log
+tensorboard/
+wandb/
+
+# Cache
+cache/
+.cache/
+temp/
+tmp/
+*.tmp
+
+# HuggingFace
+.huggingface/
+
+# ============================================================================
+# BAGLEY SPECIFIC
+# ============================================================================
+
+# Installation marker
+.bagley_installed
+
+# Generated configs
+config/hardware.toml
+config/model.toml
+
+# User data (private)
+user_data/
+conversations/
+memories/
+
+# Generated media
+output/
+generated/
+*.mp4
+*.mp3
+*.wav
+*.png
+*.jpg
+*.jpeg
+!assets/*.png
+!assets/*.jpg
+!assets/*.svg
+
+# Secrets
+.env
+.env.local
+secrets.yaml
+api_keys.txt
+
+# ============================================================================
+# OS SPECIFIC
+# ============================================================================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.fuse_hidden*
+.Trash-*
+
+# ============================================================================
+# MISC
+# ============================================================================
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Large files
+*.iso
+*.dmg
+
+# Compiled
+*.dll
+*.exe
+*.o
+*.a
+
+# Setup logs
+setup_log.txt
