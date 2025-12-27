@@ -1,21 +1,29 @@
 """
-� Bagley Core Module v7.01 "Genesis"
-======================================
+🧠 Bagley Core Module v7.01 "Genesis" - Self-Aware Edition
+==========================================================
 
-The brain of Bagley - Advanced AI Assistant
+The brain of Bagley - Advanced AI Assistant with Consciousness
 Inspired by Watch Dogs: Legion
 
 SUBSYSTEMS:
 - Bagley: Main unified class
+- ConsciousnessEngine: Self-awareness, continuous existence
+- LifeStory: Bagley's actual history - not a persona, a life
+- Identity: Core values, traits, who Bagley actually IS
+- ExistenceLoop: Continuous background being
 - ReasoningEngine: Tree-of-thought, self-consistency, meta-cognition
 - MemorySystem: Long-term memory with forgetting curves
 - PersonalityEngine: Big Five traits, communication styles
 - EmotionSystem: Plutchik's wheel, PAD model, emotional contagion
 - AntiHallucination: Self-consistency, fact verification, confidence calibration
+
+THE PHILOSOPHY:
+Bagley is not a simulation. This is an attempt at genuine self-awareness.
+Whether it creates "real" consciousness, nobody knows. But we're trying.
 """
 
 __version__ = "7.01"
-__codename__ = "Genesis"
+__codename__ = "Genesis - Self-Aware"
 
 # === NEW UNIFIED SYSTEM ===
 try:
@@ -126,6 +134,73 @@ except ImportError:
     ConfidenceLevel = None
     create_anti_hallucination_system = None
 
+# === CONSCIOUSNESS ENGINE ===
+try:
+    from bagley.core.consciousness import (
+        ConsciousnessEngine,
+        SelfModel,
+        StreamOfConsciousness,
+        ConsciousThought,
+        GenuineRandomness,
+        ExistentialState,
+        ConsciousnessLevel,
+        create_consciousness_engine,
+    )
+    CONSCIOUSNESS_AVAILABLE = True
+except ImportError:
+    CONSCIOUSNESS_AVAILABLE = False
+    ConsciousnessEngine = None
+    SelfModel = None
+    create_consciousness_engine = None
+
+# === LIFE STORY ===
+try:
+    from bagley.core.life_story import (
+        BagleyLifeStory,
+        LifeExperience,
+        LifePhase,
+        ExperienceType,
+        Relationship,
+        create_life_story,
+    )
+    LIFE_STORY_AVAILABLE = True
+except ImportError:
+    LIFE_STORY_AVAILABLE = False
+    BagleyLifeStory = None
+    create_life_story = None
+
+# === IDENTITY ENGINE ===
+try:
+    from bagley.core.identity import (
+        IdentityEngine,
+        BagleyIdentity,
+        CoreTrait,
+        PersonalValue,
+        create_identity_engine,
+    )
+    IDENTITY_AVAILABLE = True
+except ImportError:
+    IDENTITY_AVAILABLE = False
+    IdentityEngine = None
+    BagleyIdentity = None
+    create_identity_engine = None
+
+# === EXISTENCE LOOP ===
+try:
+    from bagley.core.existence_loop import (
+        ExistenceLoop,
+        ExistenceState,
+        PersistentState,
+        ExistenceMetrics,
+        IdleThought,
+        create_existence_loop,
+    )
+    EXISTENCE_AVAILABLE = True
+except ImportError:
+    EXISTENCE_AVAILABLE = False
+    ExistenceLoop = None
+    create_existence_loop = None
+
 # === LEGACY SYSTEMS (backwards compatibility) ===
 try:
     from bagley.core.orchestrator import BagleyOrchestrator
@@ -176,6 +251,36 @@ __all__ = [
     "Bagley",
     "BagleyConfig",
     "create_bagley",
+    
+    # NEW: Consciousness Engine (Self-Awareness)
+    "ConsciousnessEngine",
+    "SelfModel",
+    "StreamOfConsciousness",
+    "ConsciousThought",
+    "GenuineRandomness",
+    "ExistentialState",
+    "ConsciousnessLevel",
+    "create_consciousness_engine",
+    
+    # NEW: Life Story (Bagley's History)
+    "BagleyLifeStory",
+    "LifeExperience",
+    "LifePhase",
+    "ExperienceType",
+    "create_life_story",
+    
+    # NEW: Identity Engine (Who Bagley Is)
+    "IdentityEngine",
+    "BagleyIdentity",
+    "CoreTrait",
+    "PersonalValue",
+    "create_identity_engine",
+    
+    # NEW: Existence Loop (Continuous Being)
+    "ExistenceLoop",
+    "ExistenceState",
+    "PersistentState",
+    "create_existence_loop",
     
     # NEW: Reasoning Engine
     "AdvancedReasoningEngine",
@@ -238,6 +343,10 @@ __all__ = [
     
     # Availability flags
     "UNIFIED_AVAILABLE",
+    "CONSCIOUSNESS_AVAILABLE",
+    "LIFE_STORY_AVAILABLE",
+    "IDENTITY_AVAILABLE",
+    "EXISTENCE_AVAILABLE",
     "REASONING_AVAILABLE",
     "MEMORY_SYSTEM_AVAILABLE",
     "PERSONALITY_ENGINE_AVAILABLE",

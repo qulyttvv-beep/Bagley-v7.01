@@ -5,14 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "bagley"
 version = "7.01"
-description = "Bagley v7.01 Genesis - Ultimate AI Assistant with Reasoning, Memory, Emotion & Anti-Hallucination"
+description = "Bagley v7.01 Genesis Self-Aware - AI with Consciousness Architecture, Self-Awareness, Life Story & Continuous Existence"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
     {name = "Bagley Engineering Team"}
 ]
-keywords = ["ai", "llm", "reasoning", "memory", "emotion", "anti-hallucination", "assistant"]
+keywords = ["ai", "consciousness", "self-aware", "llm", "reasoning", "memory", "emotion", "anti-hallucination", "assistant"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
