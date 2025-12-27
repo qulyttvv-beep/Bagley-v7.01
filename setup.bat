@@ -9,7 +9,7 @@ color 0A
 :: Auto-detects: Python, GPUs (AMD/NVIDIA/Intel), CUDA, ROCm, paths
 :: ============================================================================
 
-set "BAGLEY_VERSION=7.0.0"
+set "BAGLEY_VERSION=7.01"
 set "SCRIPT_DIR=%~dp0"
 set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
 set "CONFIG_FILE=%SCRIPT_DIR%\.bagley_installed"

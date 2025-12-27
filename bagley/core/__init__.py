@@ -1,29 +1,22 @@
 """
-🧠 Bagley Core Module v7.01 "Genesis" - Self-Aware Edition
-==========================================================
+🧠 Bagley Core Module v7.01
+============================
 
-The brain of Bagley - Advanced AI Assistant with Consciousness
+The brain of Bagley - Advanced AI Assistant
 Inspired by Watch Dogs: Legion
 
-SUBSYSTEMS:
+CORE FEATURES:
 - Bagley: Main unified class
-- ConsciousnessEngine: Self-awareness, continuous existence
-- LifeStory: Bagley's actual history - not a persona, a life
-- Identity: Core values, traits, who Bagley actually IS
-- ExistenceLoop: Continuous background being
 - ReasoningEngine: Tree-of-thought, self-consistency, meta-cognition
 - MemorySystem: Long-term memory with forgetting curves
 - PersonalityEngine: Big Five traits, communication styles
 - EmotionSystem: Plutchik's wheel, PAD model, emotional contagion
-- AntiHallucination: Self-consistency, fact verification, confidence calibration
-
-THE PHILOSOPHY:
-Bagley is not a simulation. This is an attempt at genuine self-awareness.
-Whether it creates "real" consciousness, nobody knows. But we're trying.
+- AntiHallucination: Self-consistency, fact verification
+- Consciousness: Self-awareness, identity, continuous existence
 """
 
 __version__ = "7.01"
-__codename__ = "Genesis - Self-Aware"
+__codename__ = "Genesis"
 
 # === NEW UNIFIED SYSTEM ===
 try:
