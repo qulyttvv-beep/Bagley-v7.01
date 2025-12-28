@@ -1,6 +1,6 @@
 """
 🖥️ Bagley Desktop UI
-Ultra-modern interface with Chat + Training tabs
+Ultra-modern interface with Chat + Training + API tabs
 """
 
 from bagley.ui.app import BagleyApp
@@ -15,6 +15,33 @@ except ImportError:
     TrainingTab = None
     run_app = None
 
+# Hardware monitoring
+try:
+    from bagley.ui.hardware_monitor import (
+        HardwareMonitor, GPUStats, CPUStats, SystemStats,
+        get_hardware_monitor, get_smart_logger
+    )
+except ImportError:
+    HardwareMonitor = None
+    get_hardware_monitor = None
+
+# API server
+try:
+    from bagley.ui.api_server import (
+        BagleyAPIServer, APIConfig, HostMode,
+        create_api_server
+    )
+except ImportError:
+    BagleyAPIServer = None
+    create_api_server = None
+
+# API tab
+try:
+    from bagley.ui.api_tab import APITabWidget, HardwareMonitorWidget
+except ImportError:
+    APITabWidget = None
+    HardwareMonitorWidget = None
+
 __all__ = [
     # v1
     "BagleyApp",
@@ -27,4 +54,15 @@ __all__ = [
     "ChatTab",
     "TrainingTab",
     "run_app",
+    # Hardware
+    "HardwareMonitor",
+    "get_hardware_monitor",
+    "get_smart_logger",
+    # API
+    "BagleyAPIServer",
+    "APIConfig",
+    "HostMode",
+    "create_api_server",
+    "APITabWidget",
+    "HardwareMonitorWidget",
 ]
