@@ -450,15 +450,27 @@ for name in TTS_DATASETS:
 
 ## 💾 TOTAL STORAGE REQUIREMENTS
 
-| Model | Estimated Size |
-|-------|---------------|
-| 💬 Chat | ~2 TB |
-| 🖼️ Image | ~5 TB |
-| 🎬 Video | ~10 TB |
-| 🔊 TTS | ~500 GB |
-| 🎲 3D | ~1 TB |
-| ⬆️ Upscaler | ~50 GB |
-| **TOTAL** | **~18-20 TB** |
+| Model | Estimated Size | Breakdown |
+|-------|---------------|-----------|
+| 💬 Chat | ~2 TB | Pretraining (The Pile, C4, etc.) + instruction data |
+| 🖼️ Image | ~5 TB | LAION subsets, DiffusionDB, high-res images |
+| 🎬 Video | ~10 TB | WebVid-10M, InternVid, Panda-70M (biggest!) |
+| 🔊 TTS | ~500 GB | LibriTTS, Common Voice, GigaSpeech |
+| 🎲 3D | ~1 TB | Objaverse, ShapeNet, 3D scenes |
+| ⬆️ Upscaler | ~50 GB | DIV2K, Flickr2K, LSDIR |
+| **TOTAL** | **~18.5 TB** | Round up to ~20 TB for headroom |
+
+### Math Check:
+```
+Chat:     2,000 GB
+Image:    5,000 GB
+Video:   10,000 GB
+TTS:       500 GB
+3D:      1,000 GB
+Upscaler:   50 GB
+─────────────────
+TOTAL:  18,550 GB = ~18.5 TB
+```
 
 ---
 
