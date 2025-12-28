@@ -77,10 +77,16 @@ dependencies = [
     "omegaconf>=2.3.0",
     
     # PC Integration
+    # PC Integration
     "pyautogui>=0.9.54",
     "psutil>=6.0.0",
     "watchdog>=5.0.0",
     "playwright>=1.48.0",
+    
+    # Web Intelligence (News, Twitter, Reddit scraping)
+    "requests>=2.31.0",
+    "feedparser>=6.0.0",
+    "schedule>=1.2.0",
 ]
 
 [project.optional-dependencies]

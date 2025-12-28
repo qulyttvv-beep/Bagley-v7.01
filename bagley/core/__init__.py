@@ -194,6 +194,42 @@ except ImportError:
     ExistenceLoop = None
     create_existence_loop = None
 
+# === WEB INTELLIGENCE ===
+try:
+    from bagley.core.web_intelligence import (
+        WebIntelligenceSystem,
+        ScraperConfig,
+        ContentType,
+        WebContent,
+        NewsScraper,
+        RedditScraper,
+        TwitterScraper,
+        create_web_intelligence,
+    )
+    WEB_INTELLIGENCE_AVAILABLE = True
+except ImportError:
+    WEB_INTELLIGENCE_AVAILABLE = False
+    WebIntelligenceSystem = None
+    create_web_intelligence = None
+
+# === DAILY INTELLIGENCE ===
+try:
+    from bagley.core.daily_intelligence import (
+        DailyIntelligenceScheduler,
+        BagleyKnowledgeUpdater,
+        BagleyWebIntegration,
+        ScheduleConfig,
+        get_web_integration,
+        start_daily_intelligence,
+        stop_daily_intelligence,
+    )
+    DAILY_INTELLIGENCE_AVAILABLE = True
+except ImportError:
+    DAILY_INTELLIGENCE_AVAILABLE = False
+    DailyIntelligenceScheduler = None
+    start_daily_intelligence = None
+    stop_daily_intelligence = None
+
 # === LEGACY SYSTEMS (backwards compatibility) ===
 try:
     from bagley.core.orchestrator import BagleyOrchestrator
@@ -345,4 +381,25 @@ __all__ = [
     "PERSONALITY_ENGINE_AVAILABLE",
     "EMOTION_AVAILABLE",
     "ANTI_HALLUCINATION_AVAILABLE",
+    "WEB_INTELLIGENCE_AVAILABLE",
+    "DAILY_INTELLIGENCE_AVAILABLE",
+    
+    # Web Intelligence (News, Twitter, Reddit)
+    "WebIntelligenceSystem",
+    "ScraperConfig",
+    "ContentType",
+    "WebContent",
+    "NewsScraper",
+    "RedditScraper",
+    "TwitterScraper",
+    "create_web_intelligence",
+    
+    # Daily Intelligence Scheduler
+    "DailyIntelligenceScheduler",
+    "BagleyKnowledgeUpdater",
+    "BagleyWebIntegration",
+    "ScheduleConfig",
+    "get_web_integration",
+    "start_daily_intelligence",
+    "stop_daily_intelligence",
 ]
