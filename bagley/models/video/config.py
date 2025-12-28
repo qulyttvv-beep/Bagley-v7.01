@@ -120,6 +120,30 @@ class BagleyVideoConfig:
     use_frame_consistency: bool = True
     frame_consistency_strength: float = 0.3
     
+    # ==================== Audio Configuration ====================
+    
+    # Enable audio generation with video
+    generate_audio: bool = True
+    audio_sample_rate: int = 44100
+    audio_channels: int = 2  # Stereo
+    
+    # Audio model settings
+    audio_hidden_size: int = 1024
+    audio_num_layers: int = 12
+    audio_latent_dim: int = 128
+    
+    # Audio types
+    audio_types: List[str] = field(default_factory=lambda: [
+        "ambient",      # Background sounds
+        "sfx",          # Sound effects
+        "voice",        # Speech/dialogue
+        "music",        # Background music
+    ])
+    
+    # Audio sync with video
+    audio_video_sync: bool = True
+    audio_sync_method: str = "cross_attention"  # or "concat", "adaptive"
+    
     # ==================== Computed Properties ====================
     
     @property

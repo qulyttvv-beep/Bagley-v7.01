@@ -1,6 +1,7 @@
 """
 🎬 BagleyVideo - Custom Video Generation Model
 Wan2.2/Mochi inspired Asymmetric Diffusion Transformer
+With synchronized audio generation
 """
 
 from bagley.models.video.config import BagleyVideoConfig
@@ -12,6 +13,15 @@ from bagley.models.video.infinite_video import (
     VideoStitcher,
     VideoSegment,
 )
+from bagley.models.video.audio_generator import (
+    AudioType,
+    AudioConfig,
+    AudioClip,
+    VideoAudioGenerator,
+    VoiceCloner,
+    AudioMixer,
+    create_video_audio_generator,
+)
 
 __all__ = [
     "BagleyVideoConfig",
@@ -22,4 +32,12 @@ __all__ = [
     "InfiniteVideoGenerator",
     "VideoStitcher",
     "VideoSegment",
+    # Audio generation
+    "AudioType",
+    "AudioConfig", 
+    "AudioClip",
+    "VideoAudioGenerator",
+    "VoiceCloner",
+    "AudioMixer",
+    "create_video_audio_generator",
 ]
