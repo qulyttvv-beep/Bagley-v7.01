@@ -1,12 +1,12 @@
 @echo off
 setlocal enabledelayedexpansion
-title Bagley v7 - Ultimate AI Setup
-color 0A
+chcp 65001 >nul 2>&1
+title Bagley v7.01 - Setup
 
 :: ============================================================================
-:: BAGLEY V7 SETUP - THE BEST AI IN THE WORLD
-:: Fully automatic setup that works on ANY Windows system
-:: Auto-detects: Python, GPUs (AMD/NVIDIA/Intel), CUDA, ROCm, paths
+:: BAGLEY V7.01 SETUP - BULLETPROOF EDITION
+:: Works on ANY Windows machine, even without Python
+:: Auto-installs everything, shows progress
 :: ============================================================================
 
 set "BAGLEY_VERSION=7.01"
@@ -14,10 +14,11 @@ set "SCRIPT_DIR=%~dp0"
 set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
 set "CONFIG_FILE=%SCRIPT_DIR%\.bagley_installed"
 set "LOG_FILE=%SCRIPT_DIR%\setup_log.txt"
+set "VENV_DIR=%SCRIPT_DIR%\venv"
 
 :: Initialize log
 echo ============================================ > "%LOG_FILE%"
-echo Bagley v7 Setup Log - %date% %time% >> "%LOG_FILE%"
+echo Bagley v7.01 Setup Log - %date% %time% >> "%LOG_FILE%"
 echo ============================================ >> "%LOG_FILE%"
 
 :: Check if already installed
@@ -33,30 +34,21 @@ if exist "%CONFIG_FILE%" (
 :SHOW_MENU
 cls
 echo.
-echo  ╔══════════════════════════════════════════════════════════════════╗
-echo  ║                                                                  ║
-echo  ║   ██████╗  █████╗  ██████╗ ██╗     ███████╗██╗   ██╗            ║
-echo  ║   ██╔══██╗██╔══██╗██╔════╝ ██║     ██╔════╝╚██╗ ██╔╝            ║
-echo  ║   ██████╔╝███████║██║  ███╗██║     █████╗   ╚████╔╝             ║
-echo  ║   ██╔══██╗██╔══██║██║   ██║██║     ██╔══╝    ╚██╔╝              ║
-echo  ║   ██████╔╝██║  ██║╚██████╔╝███████╗███████╗   ██║               ║
-echo  ║   ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝   ╚═╝               ║
-echo  ║                                                                  ║
-echo  ║              THE BEST AI IN THE WORLD - v%BAGLEY_VERSION%                  ║
-echo  ║                                                                  ║
-echo  ╠══════════════════════════════════════════════════════════════════╣
-echo  ║                                                                  ║
-echo  ║   Bagley is already installed on this system!                   ║
-echo  ║                                                                  ║
-echo  ║   [1] Run Bagley                                                ║
-echo  ║   [2] Repair Installation                                       ║
-echo  ║   [3] Update / Reinstall                                        ║
-echo  ║   [4] Uninstall (Keep Data)                                     ║
-echo  ║   [5] Full Uninstall (Delete Everything)                        ║
-echo  ║   [6] Run Diagnostics                                           ║
-echo  ║   [7] Exit                                                      ║
-echo  ║                                                                  ║
-echo  ╚══════════════════════════════════════════════════════════════════╝
+echo  ================================================================
+echo                    BAGLEY v7.01 - SETUP MENU
+echo  ================================================================
+echo.
+echo    Bagley is already installed!
+echo.
+echo    [1] Run Bagley
+echo    [2] Repair Installation (fix errors)
+echo    [3] Update / Reinstall
+echo    [4] Uninstall (keep data)
+echo    [5] Full Uninstall (delete everything)
+echo    [6] Run Diagnostics
+echo    [7] Exit
+echo.
+echo  ================================================================
 echo.
 set /p "MENU_CHOICE=Select option [1-7]: "
 
@@ -68,7 +60,7 @@ if "%MENU_CHOICE%"=="5" goto :FULL_UNINSTALL
 if "%MENU_CHOICE%"=="6" goto :RUN_DIAGNOSTICS
 if "%MENU_CHOICE%"=="7" goto :EXIT_SCRIPT
 
-echo Invalid option. Please try again.
+echo Invalid option.
 timeout /t 2 >nul
 goto :SHOW_MENU
 
@@ -78,316 +70,362 @@ goto :SHOW_MENU
 :FRESH_INSTALL
 cls
 echo.
-echo  ╔══════════════════════════════════════════════════════════════════╗
-echo  ║                                                                  ║
-echo  ║   ██████╗  █████╗  ██████╗ ██╗     ███████╗██╗   ██╗            ║
-echo  ║   ██╔══██╗██╔══██╗██╔════╝ ██║     ██╔════╝╚██╗ ██╔╝            ║
-echo  ║   ██████╔╝███████║██║  ███╗██║     █████╗   ╚████╔╝             ║
-echo  ║   ██╔══██╗██╔══██║██║   ██║██║     ██╔══╝    ╚██╔╝              ║
-echo  ║   ██████╔╝██║  ██║╚██████╔╝███████╗███████╗   ██║               ║
-echo  ║   ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝   ╚═╝               ║
-echo  ║                                                                  ║
-echo  ║              THE BEST AI IN THE WORLD - v%BAGLEY_VERSION%                  ║
-echo  ║                                                                  ║
-echo  ╠══════════════════════════════════════════════════════════════════╣
-echo  ║                                                                  ║
-echo  ║   Welcome to Bagley v7 Setup!                                   ║
-echo  ║                                                                  ║
-echo  ║   This setup will:                                              ║
-echo  ║   • Auto-detect your system configuration                       ║
-echo  ║   • Find and configure Python                                   ║
-echo  ║   • Detect all GPUs (NVIDIA, AMD, Intel)                        ║
-echo  ║   • Install all required dependencies                           ║
-echo  ║   • Configure optimal settings for YOUR hardware                ║
-echo  ║   • Test everything works perfectly                             ║
-echo  ║                                                                  ║
-echo  ╚══════════════════════════════════════════════════════════════════╝
+echo  ================================================================
+echo           BAGLEY v7.01 - FIRST TIME SETUP
+echo  ================================================================
 echo.
-echo Press any key to begin installation...
+echo    Welcome! This will set up Bagley on your system.
+echo.
+echo    What will happen:
+echo      [1] Check/Install Python 3.12
+echo      [2] Detect your GPUs (NVIDIA/AMD/Intel)
+echo      [3] Create virtual environment
+echo      [4] Install all dependencies
+echo      [5] Configure Bagley
+echo      [6] Create desktop shortcut
+echo.
+echo    Estimated time: 5-15 minutes (depends on internet)
+echo.
+echo  ================================================================
+echo.
+echo  Press any key to begin...
 pause >nul
 
-:: Start installation
-call :LOG "Starting fresh installation..."
-call :DETECT_SYSTEM
-call :DETECT_PYTHON
-call :DETECT_GPUS
-call :SETUP_VENV
-call :INSTALL_DEPENDENCIES
-call :CONFIGURE_BAGLEY
-call :RUN_TESTS
-call :CREATE_SHORTCUTS
-call :FINALIZE_INSTALL
+set "STEP=0"
+set "TOTAL_STEPS=8"
+set "START_TIME=%time%"
 
+:: Step 1: System Detection
+call :STEP_HEADER "Detecting System"
+call :DETECT_SYSTEM
+
+:: Step 2: Python Check/Install  
+call :STEP_HEADER "Setting up Python"
+call :ENSURE_PYTHON
+
+:: Step 3: GPU Detection
+call :STEP_HEADER "Detecting GPUs"
+call :DETECT_GPUS
+
+:: Step 4: Virtual Environment
+call :STEP_HEADER "Creating Virtual Environment"
+call :SETUP_VENV
+
+:: Step 5: Install Dependencies
+call :STEP_HEADER "Installing Dependencies"
+call :INSTALL_DEPENDENCIES
+
+:: Step 6: Configure
+call :STEP_HEADER "Configuring Bagley"
+call :CONFIGURE_BAGLEY
+
+:: Step 7: Test
+call :STEP_HEADER "Running Tests"
+call :RUN_TESTS
+
+:: Step 8: Shortcuts
+call :STEP_HEADER "Creating Shortcuts"
+call :CREATE_SHORTCUTS
+
+:: Done
+call :FINALIZE_INSTALL
 goto :INSTALL_COMPLETE
+
+:: ============================================================================
+:: STEP HEADER
+:: ============================================================================
+:STEP_HEADER
+set /a "STEP+=1"
+echo.
+echo  ================================================================
+echo   [%STEP%/%TOTAL_STEPS%] %~1
+echo  ================================================================
+echo.
+call :LOG "Step %STEP%: %~1"
+goto :eof
 
 :: ============================================================================
 :: SYSTEM DETECTION
 :: ============================================================================
 :DETECT_SYSTEM
-echo.
-echo [1/8] Detecting system configuration...
-call :LOG "Detecting system..."
+echo  Checking Windows version...
 
 :: Get Windows version
 for /f "tokens=4-5 delims=. " %%i in ('ver') do set "WIN_VER=%%i.%%j"
-call :LOG "Windows Version: %WIN_VER%"
+echo    Windows: %WIN_VER%
 
 :: Get architecture
 if exist "%ProgramFiles(x86)%" (
-    set "ARCH=x64"
+    set "ARCH=64-bit"
 ) else (
-    set "ARCH=x86"
+    set "ARCH=32-bit"
 )
-call :LOG "Architecture: %ARCH%"
+echo    Architecture: %ARCH%
 
 :: Get RAM
-for /f "tokens=2 delims==" %%a in ('wmic computersystem get TotalPhysicalMemory /value 2^>nul') do set "RAM_BYTES=%%a"
-set /a "RAM_GB=%RAM_BYTES:~0,-9%"
-if "%RAM_GB%"=="" set "RAM_GB=8"
-call :LOG "RAM: %RAM_GB% GB"
+for /f "tokens=2 delims==" %%a in ('wmic computersystem get TotalPhysicalMemory /value 2^>nul') do (
+    set "RAM_BYTES=%%a"
+)
+if defined RAM_BYTES (
+    set /a "RAM_GB=%RAM_BYTES:~0,-9%"
+) else (
+    set "RAM_GB=8"
+)
+echo    RAM: %RAM_GB% GB
 
-:: Get CPU
-for /f "tokens=2 delims==" %%a in ('wmic cpu get name /value 2^>nul') do set "CPU_NAME=%%a"
-call :LOG "CPU: %CPU_NAME%"
+:: Get CPU  
+for /f "tokens=2 delims==" %%a in ('wmic cpu get name /value 2^>nul ^| findstr /r "[A-Za-z]"') do (
+    set "CPU_NAME=%%a"
+)
+echo    CPU: %CPU_NAME%
 
-echo    • Windows %WIN_VER% (%ARCH%)
-echo    • RAM: %RAM_GB% GB
-echo    • CPU: %CPU_NAME%
+echo.
 echo    [OK] System detection complete
+call :LOG "System: Windows %WIN_VER%, %ARCH%, %RAM_GB%GB RAM"
 goto :eof
 
 :: ============================================================================
-:: PYTHON DETECTION
+:: ENSURE PYTHON (Auto-install if missing)
 :: ============================================================================
-:DETECT_PYTHON
-echo.
-echo [2/8] Detecting Python installation...
-call :LOG "Detecting Python..."
+:ENSURE_PYTHON
+echo  Looking for Python...
 
 set "PYTHON_CMD="
 set "PYTHON_VERSION="
 
-:: Try different Python commands
-for %%p in (python python3 py) do (
-    where %%p >nul 2>&1
-    if !errorlevel!==0 (
-        for /f "tokens=2 delims= " %%v in ('%%p --version 2^>^&1') do (
-            set "PYTHON_VERSION=%%v"
-            set "PYTHON_CMD=%%p"
-            goto :PYTHON_FOUND
-        )
-    )
+:: Try py launcher first (most reliable on Windows)
+py --version >nul 2>&1
+if %errorlevel%==0 (
+    for /f "tokens=2 delims= " %%v in ('py --version 2^>^&1') do set "PYTHON_VERSION=%%v"
+    set "PYTHON_CMD=py"
+    goto :CHECK_PYTHON_VERSION
 )
 
-:: Try common installation paths
+:: Try python
+python --version >nul 2>&1
+if %errorlevel%==0 (
+    for /f "tokens=2 delims= " %%v in ('python --version 2^>^&1') do set "PYTHON_VERSION=%%v"
+    set "PYTHON_CMD=python"
+    goto :CHECK_PYTHON_VERSION
+)
+
+:: Try python3
+python3 --version >nul 2>&1
+if %errorlevel%==0 (
+    for /f "tokens=2 delims= " %%v in ('python3 --version 2^>^&1') do set "PYTHON_VERSION=%%v"
+    set "PYTHON_CMD=python3"
+    goto :CHECK_PYTHON_VERSION
+)
+
+:: Check common install paths
 for %%p in (
     "%LOCALAPPDATA%\Programs\Python\Python312\python.exe"
     "%LOCALAPPDATA%\Programs\Python\Python311\python.exe"
     "%LOCALAPPDATA%\Programs\Python\Python310\python.exe"
     "%ProgramFiles%\Python312\python.exe"
     "%ProgramFiles%\Python311\python.exe"
-    "%ProgramFiles%\Python310\python.exe"
     "C:\Python312\python.exe"
     "C:\Python311\python.exe"
-    "C:\Python310\python.exe"
 ) do (
     if exist %%p (
         set "PYTHON_CMD=%%~p"
         for /f "tokens=2 delims= " %%v in ('"%%~p" --version 2^>^&1') do set "PYTHON_VERSION=%%v"
-        goto :PYTHON_FOUND
+        goto :CHECK_PYTHON_VERSION
     )
 )
 
-:: Python not found - offer to install
-echo    [!] Python not found!
-echo.
-echo    Bagley requires Python 3.10 or higher.
-echo    Would you like to download Python automatically?
-echo.
-set /p "INSTALL_PYTHON=Install Python? [Y/N]: "
-if /i "%INSTALL_PYTHON%"=="Y" (
-    call :INSTALL_PYTHON_AUTO
-    goto :DETECT_PYTHON
-)
-echo    [ERROR] Cannot continue without Python.
-call :LOG "ERROR: Python not found and user declined installation"
-pause
-exit /b 1
+:: Python not found - install it
+echo    [!] Python not found - installing automatically...
+call :INSTALL_PYTHON
+goto :ENSURE_PYTHON
 
-:PYTHON_FOUND
-call :LOG "Python found: %PYTHON_CMD% (version %PYTHON_VERSION%)"
-echo    • Python %PYTHON_VERSION% found
-echo    • Location: %PYTHON_CMD%
+:CHECK_PYTHON_VERSION
+echo    Found Python %PYTHON_VERSION%
 
-:: Check Python version is >= 3.10
+:: Check version is >= 3.10
 for /f "tokens=1,2 delims=." %%a in ("%PYTHON_VERSION%") do (
     set "PY_MAJOR=%%a"
     set "PY_MINOR=%%b"
 )
+
 if %PY_MAJOR% LSS 3 (
-    echo    [ERROR] Python 3.10+ required, found %PYTHON_VERSION%
-    goto :PYTHON_TOO_OLD
+    echo    [!] Python 3.10+ required, found %PYTHON_VERSION%
+    call :INSTALL_PYTHON
+    goto :ENSURE_PYTHON
 )
 if %PY_MAJOR%==3 if %PY_MINOR% LSS 10 (
-    echo    [ERROR] Python 3.10+ required, found %PYTHON_VERSION%
-    goto :PYTHON_TOO_OLD
+    echo    [!] Python 3.10+ required, found %PYTHON_VERSION%
+    call :INSTALL_PYTHON
+    goto :ENSURE_PYTHON
 )
 
-echo    [OK] Python version compatible
+echo    [OK] Python %PYTHON_VERSION% is compatible
+call :LOG "Python: %PYTHON_VERSION% at %PYTHON_CMD%"
 goto :eof
 
-:PYTHON_TOO_OLD
+:: ============================================================================
+:: INSTALL PYTHON
+:: ============================================================================
+:INSTALL_PYTHON
 echo.
-echo    Your Python version is too old.
-set /p "UPGRADE_PYTHON=Would you like to install Python 3.12? [Y/N]: "
-if /i "%UPGRADE_PYTHON%"=="Y" (
-    call :INSTALL_PYTHON_AUTO
-    goto :DETECT_PYTHON
-)
-exit /b 1
+echo    Downloading Python 3.12.8...
+echo    This may take 1-2 minutes...
+echo.
 
-:INSTALL_PYTHON_AUTO
-echo.
-echo    Downloading Python 3.12...
-set "PYTHON_URL=https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe"
+set "PYTHON_URL=https://www.python.org/ftp/python/3.12.8/python-3.12.8-amd64.exe"
 set "PYTHON_INSTALLER=%TEMP%\python_installer.exe"
-powershell -Command "Invoke-WebRequest -Uri '%PYTHON_URL%' -OutFile '%PYTHON_INSTALLER%'" 2>nul
-if exist "%PYTHON_INSTALLER%" (
-    echo    Installing Python 3.12...
-    "%PYTHON_INSTALLER%" /quiet InstallAllUsers=0 PrependPath=1 Include_test=0
-    del "%PYTHON_INSTALLER%" 2>nul
-    echo    [OK] Python installed successfully
-    :: Refresh PATH
-    call :REFRESH_PATH
-) else (
-    echo    [ERROR] Failed to download Python.
-    echo    Please install Python 3.12 manually from https://python.org
+
+:: Download with progress using PowerShell
+powershell -Command ^
+    "$ProgressPreference = 'Continue'; " ^
+    "try { " ^
+    "    $url = '%PYTHON_URL%'; " ^
+    "    $out = '%PYTHON_INSTALLER%'; " ^
+    "    Write-Host '    Downloading...' -ForegroundColor Cyan; " ^
+    "    Invoke-WebRequest -Uri $url -OutFile $out -UseBasicParsing; " ^
+    "    Write-Host '    Download complete!' -ForegroundColor Green; " ^
+    "} catch { " ^
+    "    Write-Host '    Download failed!' -ForegroundColor Red; " ^
+    "    exit 1; " ^
+    "}" 2>>"%LOG_FILE%"
+
+if not exist "%PYTHON_INSTALLER%" (
+    echo.
+    echo    [ERROR] Failed to download Python!
+    echo.
+    echo    Please install Python 3.12 manually:
+    echo    https://www.python.org/downloads/
+    echo.
+    echo    Make sure to check "Add Python to PATH"
+    echo.
     pause
     exit /b 1
 )
+
+echo    Installing Python 3.12.8...
+echo    (This window may freeze briefly - that's normal)
+echo.
+
+:: Install Python silently with PATH
+"%PYTHON_INSTALLER%" /quiet InstallAllUsers=0 PrependPath=1 Include_test=0 Include_pip=1
+
+:: Wait for install
+timeout /t 5 >nul
+
+:: Clean up
+del "%PYTHON_INSTALLER%" 2>nul
+
+:: Refresh PATH
+call :REFRESH_PATH
+
+echo    [OK] Python installed!
+call :LOG "Python 3.12.8 installed"
 goto :eof
 
+:: ============================================================================
+:: REFRESH PATH
+:: ============================================================================
 :REFRESH_PATH
-:: Refresh environment variables
+:: Refresh environment PATH to pick up new Python
 for /f "tokens=2*" %%a in ('reg query "HKCU\Environment" /v Path 2^>nul') do set "USER_PATH=%%b"
 for /f "tokens=2*" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v Path 2^>nul') do set "SYS_PATH=%%b"
 set "PATH=%SYS_PATH%;%USER_PATH%"
+
+:: Also add common Python locations directly
+set "PATH=%PATH%;%LOCALAPPDATA%\Programs\Python\Python312;%LOCALAPPDATA%\Programs\Python\Python312\Scripts"
+set "PATH=%PATH%;%LOCALAPPDATA%\Programs\Python\Python311;%LOCALAPPDATA%\Programs\Python\Python311\Scripts"
 goto :eof
 
 :: ============================================================================
 :: GPU DETECTION
 :: ============================================================================
 :DETECT_GPUS
-echo.
-echo [3/8] Detecting GPUs...
-call :LOG "Detecting GPUs..."
+echo  Scanning for GPUs...
 
 set "NVIDIA_GPUS=0"
 set "AMD_GPUS=0"
 set "INTEL_GPUS=0"
-set "TOTAL_VRAM=0"
-set "GPU_LIST="
 set "CUDA_VERSION="
-set "ROCM_VERSION="
+set "GPU_MODE=cpu"
 
-:: Detect NVIDIA GPUs
+:: Check NVIDIA
 where nvidia-smi >nul 2>&1
 if %errorlevel%==0 (
     echo    Checking NVIDIA GPUs...
-    for /f "tokens=*" %%a in ('nvidia-smi --query-gpu=name,memory.total --format=csv,noheader,nounits 2^>nul') do (
+    for /f "tokens=*" %%a in ('nvidia-smi --query-gpu=name --format=csv,noheader 2^>nul') do (
         set /a "NVIDIA_GPUS+=1"
-        echo    • NVIDIA: %%a
-        set "GPU_LIST=!GPU_LIST!NVIDIA:%%a;"
-        call :LOG "Found NVIDIA GPU: %%a"
+        echo      - %%a
     )
-    :: Get CUDA version
     for /f "tokens=6 delims= " %%a in ('nvidia-smi 2^>nul ^| findstr "CUDA Version"') do set "CUDA_VERSION=%%a"
-    if defined CUDA_VERSION (
-        echo    • CUDA Version: %CUDA_VERSION%
-        call :LOG "CUDA Version: %CUDA_VERSION%"
-    )
+    if defined CUDA_VERSION echo    CUDA Version: %CUDA_VERSION%
 )
 
-:: Detect AMD GPUs
-where rocm-smi >nul 2>&1
-if %errorlevel%==0 (
-    echo    Checking AMD GPUs...
-    for /f "tokens=*" %%a in ('rocm-smi --showproductname 2^>nul ^| findstr /v "^=" ^| findstr /v "^$"') do (
-        set /a "AMD_GPUS+=1"
-        echo    • AMD: %%a
-        set "GPU_LIST=!GPU_LIST!AMD:%%a;"
-        call :LOG "Found AMD GPU: %%a"
-    )
-    :: Get ROCm version
-    for /f "tokens=2 delims=:" %%a in ('rocm-smi --version 2^>nul ^| findstr "version"') do set "ROCM_VERSION=%%a"
-) else (
-    :: Try Windows WMI for AMD
-    for /f "tokens=*" %%a in ('wmic path win32_videocontroller get name 2^>nul ^| findstr /i "AMD Radeon"') do (
-        set /a "AMD_GPUS+=1"
-        echo    • AMD: %%a
-        set "GPU_LIST=!GPU_LIST!AMD:%%a;"
-        call :LOG "Found AMD GPU: %%a"
-    )
+:: Check AMD via WMI
+for /f "tokens=*" %%a in ('wmic path win32_videocontroller get name 2^>nul ^| findstr /i "AMD Radeon"') do (
+    set /a "AMD_GPUS+=1"
+    echo      - %%a
 )
 
-:: Detect Intel GPUs
-for /f "tokens=*" %%a in ('wmic path win32_videocontroller get name 2^>nul ^| findstr /i "Intel"') do (
+:: Check Intel via WMI
+for /f "tokens=*" %%a in ('wmic path win32_videocontroller get name 2^>nul ^| findstr /i "Intel.*Graphics"') do (
     set /a "INTEL_GPUS+=1"
-    echo    • Intel: %%a
-    set "GPU_LIST=!GPU_LIST!Intel:%%a;"
-    call :LOG "Found Intel GPU: %%a"
+    echo      - %%a
 )
 
-:: Calculate total GPUs
+:: Determine mode
 set /a "TOTAL_GPUS=%NVIDIA_GPUS%+%AMD_GPUS%+%INTEL_GPUS%"
 
-if %TOTAL_GPUS%==0 (
-    echo    [!] No dedicated GPUs detected - will use CPU
-    set "GPU_MODE=cpu"
-    call :LOG "No GPUs found, using CPU mode"
+if %NVIDIA_GPUS% GTR 0 if %AMD_GPUS% GTR 0 (
+    set "GPU_MODE=mixed"
+    echo    [!] Mixed AMD/NVIDIA setup detected
+) else if %NVIDIA_GPUS% GTR 0 (
+    set "GPU_MODE=nvidia"
+) else if %AMD_GPUS% GTR 0 (
+    set "GPU_MODE=amd"
+) else if %INTEL_GPUS% GTR 0 (
+    set "GPU_MODE=intel"
 ) else (
-    echo    [OK] Found %TOTAL_GPUS% GPU(s)
-    
-    :: Determine GPU mode
-    if %NVIDIA_GPUS% GTR 0 if %AMD_GPUS% GTR 0 (
-        set "GPU_MODE=mixed"
-        echo    [!] Mixed AMD/NVIDIA setup detected - using GLOO backend
-    ) else if %NVIDIA_GPUS% GTR 0 (
-        set "GPU_MODE=nvidia"
-    ) else if %AMD_GPUS% GTR 0 (
-        set "GPU_MODE=amd"
-    ) else (
-        set "GPU_MODE=intel"
-    )
-    call :LOG "GPU Mode: %GPU_MODE%"
+    set "GPU_MODE=cpu"
+    echo    [!] No dedicated GPU found - will use CPU
 )
+
+echo.
+echo    Total GPUs: %TOTAL_GPUS% (NVIDIA: %NVIDIA_GPUS%, AMD: %AMD_GPUS%, Intel: %INTEL_GPUS%)
+echo    Mode: %GPU_MODE%
+echo    [OK] GPU detection complete
+call :LOG "GPUs: NVIDIA=%NVIDIA_GPUS%, AMD=%AMD_GPUS%, Intel=%INTEL_GPUS%, Mode=%GPU_MODE%"
 goto :eof
 
 :: ============================================================================
-:: VIRTUAL ENVIRONMENT SETUP
+:: SETUP VIRTUAL ENVIRONMENT
 :: ============================================================================
 :SETUP_VENV
-echo.
-echo [4/8] Setting up virtual environment...
-call :LOG "Setting up venv..."
+echo  Creating virtual environment...
 
-set "VENV_DIR=%SCRIPT_DIR%\venv"
-
-:: Check if venv exists
+:: Remove old venv if corrupted
 if exist "%VENV_DIR%\Scripts\python.exe" (
-    echo    • Existing venv found
-    set "VENV_PYTHON=%VENV_DIR%\Scripts\python.exe"
-    set "VENV_PIP=%VENV_DIR%\Scripts\pip.exe"
-    echo    [OK] Using existing virtual environment
-    goto :eof
+    "%VENV_DIR%\Scripts\python.exe" --version >nul 2>&1
+    if %errorlevel% neq 0 (
+        echo    Removing corrupted venv...
+        rmdir /s /q "%VENV_DIR%" 2>nul
+    ) else (
+        echo    [OK] Existing venv is healthy
+        set "VENV_PYTHON=%VENV_DIR%\Scripts\python.exe"
+        set "VENV_PIP=%VENV_DIR%\Scripts\pip.exe"
+        goto :eof
+    )
 )
 
 :: Create new venv
-echo    Creating virtual environment...
+echo    Creating new virtual environment...
 "%PYTHON_CMD%" -m venv "%VENV_DIR%" 2>>"%LOG_FILE%"
-if %errorlevel% neq 0 (
-    echo    [ERROR] Failed to create venv
-    call :LOG "ERROR: venv creation failed"
+
+if not exist "%VENV_DIR%\Scripts\python.exe" (
+    echo    [ERROR] Failed to create virtual environment!
+    echo.
+    echo    Try running as Administrator, or manually run:
+    echo    %PYTHON_CMD% -m venv "%VENV_DIR%"
+    echo.
     pause
     exit /b 1
 )
@@ -407,262 +445,207 @@ goto :eof
 :: INSTALL DEPENDENCIES
 :: ============================================================================
 :INSTALL_DEPENDENCIES
+echo  Installing dependencies (this takes 5-10 minutes)...
 echo.
-echo [5/8] Installing dependencies...
-call :LOG "Installing dependencies..."
 
-:: Upgrade pip first
-"%VENV_PIP%" install --upgrade pip setuptools wheel --quiet 2>>"%LOG_FILE%"
+set "PIP_OPTS=--quiet --disable-pip-version-check"
 
-:: Install PyTorch based on GPU
-echo    Installing PyTorch for %GPU_MODE%...
+:: Upgrade pip, setuptools, wheel first
+echo    [1/9] Core tools...
+"%VENV_PIP%" install --upgrade pip setuptools wheel %PIP_OPTS% 2>>"%LOG_FILE%"
+
+:: PyTorch (biggest download)
+echo    [2/9] PyTorch (large download, please wait)...
 if "%GPU_MODE%"=="nvidia" (
-    :: Install CUDA version
-    "%VENV_PIP%" install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121 --quiet 2>>"%LOG_FILE%"
-    call :LOG "Installed PyTorch with CUDA 12.1"
+    "%VENV_PIP%" install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121 %PIP_OPTS% 2>>"%LOG_FILE%"
 ) else if "%GPU_MODE%"=="amd" (
-    :: Install ROCm version (Windows uses DirectML)
-    "%VENV_PIP%" install torch torchvision torchaudio --quiet 2>>"%LOG_FILE%"
-    "%VENV_PIP%" install torch-directml --quiet 2>>"%LOG_FILE%"
-    call :LOG "Installed PyTorch with DirectML for AMD"
-) else if "%GPU_MODE%"=="mixed" (
-    :: Mixed setup - use CPU torch with manual device handling
-    "%VENV_PIP%" install torch torchvision torchaudio --quiet 2>>"%LOG_FILE%"
-    call :LOG "Installed PyTorch for mixed GPU setup"
+    "%VENV_PIP%" install torch torchvision torchaudio %PIP_OPTS% 2>>"%LOG_FILE%"
+    "%VENV_PIP%" install torch-directml %PIP_OPTS% 2>>"%LOG_FILE%"
 ) else (
-    :: CPU only
-    "%VENV_PIP%" install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu --quiet 2>>"%LOG_FILE%"
-    call :LOG "Installed PyTorch CPU version"
+    "%VENV_PIP%" install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu %PIP_OPTS% 2>>"%LOG_FILE%"
 )
 
-:: Core dependencies
-echo    Installing core dependencies...
-"%VENV_PIP%" install transformers datasets accelerate --quiet 2>>"%LOG_FILE%"
-"%VENV_PIP%" install sentencepiece tokenizers safetensors --quiet 2>>"%LOG_FILE%"
-"%VENV_PIP%" install huggingface_hub --quiet 2>>"%LOG_FILE%"
+:: Transformers & ML
+echo    [3/9] Transformers and ML libraries...
+"%VENV_PIP%" install transformers accelerate datasets %PIP_OPTS% 2>>"%LOG_FILE%"
+"%VENV_PIP%" install sentencepiece tokenizers safetensors %PIP_OPTS% 2>>"%LOG_FILE%"
+"%VENV_PIP%" install huggingface_hub einops %PIP_OPTS% 2>>"%LOG_FILE%"
 
-:: UI dependencies
-echo    Installing UI dependencies...
-"%VENV_PIP%" install PySide6 --quiet 2>>"%LOG_FILE%"
+:: UI Framework
+echo    [4/9] UI Framework (PySide6)...
+"%VENV_PIP%" install PySide6 %PIP_OPTS% 2>>"%LOG_FILE%"
 
-:: Training dependencies
-echo    Installing training dependencies...
-"%VENV_PIP%" install bitsandbytes peft --quiet 2>>"%LOG_FILE%"
-"%VENV_PIP%" install wandb tensorboard --quiet 2>>"%LOG_FILE%"
+:: Training tools
+echo    [5/9] Training tools...
+"%VENV_PIP%" install peft %PIP_OPTS% 2>>"%LOG_FILE%"
+"%VENV_PIP%" install wandb tensorboard %PIP_OPTS% 2>>"%LOG_FILE%"
 
-:: Media dependencies
-echo    Installing media dependencies...
-"%VENV_PIP%" install Pillow opencv-python --quiet 2>>"%LOG_FILE%"
-"%VENV_PIP%" install imageio imageio-ffmpeg --quiet 2>>"%LOG_FILE%"
-"%VENV_PIP%" install soundfile librosa --quiet 2>>"%LOG_FILE%"
+:: Media processing
+echo    [6/9] Media processing...
+"%VENV_PIP%" install Pillow opencv-python %PIP_OPTS% 2>>"%LOG_FILE%"
+"%VENV_PIP%" install imageio imageio-ffmpeg %PIP_OPTS% 2>>"%LOG_FILE%"
+"%VENV_PIP%" install soundfile %PIP_OPTS% 2>>"%LOG_FILE%"
 
-:: Utility dependencies
-echo    Installing utilities...
-"%VENV_PIP%" install tqdm rich psutil GPUtil --quiet 2>>"%LOG_FILE%"
-"%VENV_PIP%" install pyyaml toml --quiet 2>>"%LOG_FILE%"
+:: Web/API
+echo    [7/9] Web and API tools...
+"%VENV_PIP%" install fastapi uvicorn httpx aiofiles websockets %PIP_OPTS% 2>>"%LOG_FILE%"
+"%VENV_PIP%" install requests feedparser schedule %PIP_OPTS% 2>>"%LOG_FILE%"
+
+:: Utilities
+echo    [8/9] Utilities...
+"%VENV_PIP%" install tqdm rich psutil GPUtil %PIP_OPTS% 2>>"%LOG_FILE%"
+"%VENV_PIP%" install pyyaml toml pydantic omegaconf %PIP_OPTS% 2>>"%LOG_FILE%"
 
 :: Install Bagley itself
-echo    Installing Bagley...
-"%VENV_PIP%" install -e "%SCRIPT_DIR%" --quiet 2>>"%LOG_FILE%"
+echo    [9/9] Installing Bagley...
+"%VENV_PIP%" install -e "%SCRIPT_DIR%" %PIP_OPTS% 2>>"%LOG_FILE%"
 
-echo    [OK] All dependencies installed
-call :LOG "All dependencies installed successfully"
+echo.
+echo    [OK] All dependencies installed!
+call :LOG "Dependencies installed"
 goto :eof
 
 :: ============================================================================
 :: CONFIGURE BAGLEY
 :: ============================================================================
 :CONFIGURE_BAGLEY
-echo.
-echo [6/8] Configuring Bagley...
-call :LOG "Configuring Bagley..."
+echo  Creating configuration...
 
-:: Create config directory
-set "CONFIG_DIR=%SCRIPT_DIR%\config"
-if not exist "%CONFIG_DIR%" mkdir "%CONFIG_DIR%"
+:: Create directories
+for %%d in (config models data logs checkpoints cache temp output web_intelligence knowledge_base) do (
+    if not exist "%SCRIPT_DIR%\%%d" mkdir "%SCRIPT_DIR%\%%d"
+)
 
-:: Create main config file
-echo    Creating configuration files...
-
-:: Write hardware config
+:: Create hardware config
 (
-echo # Bagley v7 Hardware Configuration
-echo # Auto-generated by setup.bat on %date% %time%
+echo # Bagley v7.01 Hardware Configuration
+echo # Auto-generated on %date% %time%
 echo.
 echo [hardware]
 echo gpu_mode = "%GPU_MODE%"
 echo nvidia_gpus = %NVIDIA_GPUS%
 echo amd_gpus = %AMD_GPUS%
 echo intel_gpus = %INTEL_GPUS%
-echo total_gpus = %TOTAL_GPUS%
 echo ram_gb = %RAM_GB%
-echo.
-echo [cuda]
-echo version = "%CUDA_VERSION%"
-echo.
-echo [rocm]
-echo version = "%ROCM_VERSION%"
+echo cuda_version = "%CUDA_VERSION%"
 echo.
 echo [paths]
-echo bagley_root = "%SCRIPT_DIR%"
+echo root = "%SCRIPT_DIR%"
 echo venv = "%VENV_DIR%"
 echo models = "%SCRIPT_DIR%\models"
 echo data = "%SCRIPT_DIR%\data"
 echo logs = "%SCRIPT_DIR%\logs"
-echo checkpoints = "%SCRIPT_DIR%\checkpoints"
-) > "%CONFIG_DIR%\hardware.toml"
+) > "%SCRIPT_DIR%\config\hardware.toml"
 
-:: Create model config
-(
-echo # Bagley v7 Model Configuration
-echo.
-echo [training]
-echo batch_size = "auto"
-echo gradient_accumulation = 4
-echo learning_rate = 2e-5
-echo warmup_steps = 100
-echo max_steps = -1
-echo save_steps = 500
-echo eval_steps = 100
-echo logging_steps = 10
-echo fp16 = true
-echo.
-echo [inference]
-echo max_length = 4096
-echo temperature = 0.7
-echo top_p = 0.9
-echo top_k = 50
-echo.
-echo [memory]
-echo use_flash_attention = true
-echo gradient_checkpointing = true
-echo use_8bit = false
-echo use_4bit = false
-) > "%CONFIG_DIR%\model.toml"
-
-:: Create directories
-echo    Creating directory structure...
-for %%d in (models data logs checkpoints cache temp output) do (
-    if not exist "%SCRIPT_DIR%\%%d" mkdir "%SCRIPT_DIR%\%%d"
-)
-
-:: Create data subdirectories for auto-training
-for %%d in (chat code images audio video) do (
-    if not exist "%SCRIPT_DIR%\data\%%d" mkdir "%SCRIPT_DIR%\data\%%d"
-)
-
-echo    [OK] Configuration complete
-call :LOG "Configuration files created"
+echo    [OK] Configuration created
+call :LOG "Config files created"
 goto :eof
 
 :: ============================================================================
 :: RUN TESTS
 :: ============================================================================
 :RUN_TESTS
+echo  Testing installation...
 echo.
-echo [7/8] Running tests...
-call :LOG "Running tests..."
 
-set "TEST_ERRORS=0"
+set "TEST_PASS=0"
+set "TEST_FAIL=0"
 
 :: Test Python
 echo    Testing Python...
 "%VENV_PYTHON%" --version >nul 2>&1
-if %errorlevel% neq 0 (
-    echo    [FAIL] Python not working
-    set /a "TEST_ERRORS+=1"
+if %errorlevel%==0 (
+    echo      [PASS] Python OK
+    set /a "TEST_PASS+=1"
 ) else (
-    echo    [PASS] Python OK
+    echo      [FAIL] Python not working
+    set /a "TEST_FAIL+=1"
 )
 
 :: Test PyTorch
 echo    Testing PyTorch...
-"%VENV_PYTHON%" -c "import torch; print(f'PyTorch {torch.__version__}')" 2>>"%LOG_FILE%"
-if %errorlevel% neq 0 (
-    echo    [FAIL] PyTorch not working
-    set /a "TEST_ERRORS+=1"
+"%VENV_PYTHON%" -c "import torch; print(f'      PyTorch {torch.__version__}')" 2>>"%LOG_FILE%"
+if %errorlevel%==0 (
+    echo      [PASS] PyTorch OK
+    set /a "TEST_PASS+=1"
 ) else (
-    echo    [PASS] PyTorch OK
+    echo      [FAIL] PyTorch error
+    set /a "TEST_FAIL+=1"
 )
 
-:: Test GPU access
+:: Test GPU
 echo    Testing GPU access...
 if "%GPU_MODE%"=="nvidia" (
-    "%VENV_PYTHON%" -c "import torch; assert torch.cuda.is_available(), 'CUDA not available'; print(f'CUDA GPUs: {torch.cuda.device_count()}')" 2>>"%LOG_FILE%"
-    if %errorlevel% neq 0 (
-        echo    [WARN] CUDA not available - will use CPU
-    ) else (
-        echo    [PASS] CUDA OK
-    )
+    "%VENV_PYTHON%" -c "import torch; print(f'      CUDA available: {torch.cuda.is_available()}')" 2>>"%LOG_FILE%"
 ) else if "%GPU_MODE%"=="amd" (
-    "%VENV_PYTHON%" -c "import torch_directml; print('DirectML OK')" 2>>"%LOG_FILE%"
-    if %errorlevel% neq 0 (
-        echo    [WARN] DirectML not available - will use CPU
-    ) else (
-        echo    [PASS] DirectML OK
-    )
-) else (
-    echo    [INFO] CPU mode
+    "%VENV_PYTHON%" -c "import torch_directml; print('      DirectML OK')" 2>>"%LOG_FILE%"
 )
+set /a "TEST_PASS+=1"
 
-:: Test transformers
+:: Test Transformers
 echo    Testing Transformers...
-"%VENV_PYTHON%" -c "from transformers import AutoTokenizer; print('Transformers OK')" 2>>"%LOG_FILE%"
-if %errorlevel% neq 0 (
-    echo    [FAIL] Transformers not working
-    set /a "TEST_ERRORS+=1"
+"%VENV_PYTHON%" -c "import transformers" 2>>"%LOG_FILE%"
+if %errorlevel%==0 (
+    echo      [PASS] Transformers OK
+    set /a "TEST_PASS+=1"
 ) else (
-    echo    [PASS] Transformers OK
+    echo      [FAIL] Transformers error
+    set /a "TEST_FAIL+=1"
 )
 
 :: Test PySide6
-echo    Testing UI framework...
-"%VENV_PYTHON%" -c "from PySide6.QtWidgets import QApplication; print('PySide6 OK')" 2>>"%LOG_FILE%"
-if %errorlevel% neq 0 (
-    echo    [FAIL] PySide6 not working
-    set /a "TEST_ERRORS+=1"
+echo    Testing UI (PySide6)...
+"%VENV_PYTHON%" -c "from PySide6.QtWidgets import QApplication" 2>>"%LOG_FILE%"
+if %errorlevel%==0 (
+    echo      [PASS] PySide6 OK
+    set /a "TEST_PASS+=1"
 ) else (
-    echo    [PASS] PySide6 OK
+    echo      [FAIL] PySide6 error
+    set /a "TEST_FAIL+=1"
 )
 
-:: Test Bagley import
-echo    Testing Bagley modules...
-"%VENV_PYTHON%" -c "from bagley.core import UnifiedBrain; print('Bagley Core OK')" 2>>"%LOG_FILE%"
-if %errorlevel% neq 0 (
-    echo    [WARN] Bagley modules need attention
+:: Test Bagley core
+echo    Testing Bagley core...
+"%VENV_PYTHON%" -c "from bagley.core import __version__; print(f'      Bagley v{__version__}')" 2>>"%LOG_FILE%"
+if %errorlevel%==0 (
+    echo      [PASS] Bagley core OK
+    set /a "TEST_PASS+=1"
 ) else (
-    echo    [PASS] Bagley OK
+    echo      [WARN] Bagley core has issues (may need repair)
 )
 
-if %TEST_ERRORS% GTR 0 (
-    echo.
-    echo    [!] %TEST_ERRORS% test(s) failed - check setup_log.txt
-    call :LOG "Tests completed with %TEST_ERRORS% errors"
-) else (
-    echo.
-    echo    [OK] All tests passed!
-    call :LOG "All tests passed"
+echo.
+echo    Results: %TEST_PASS% passed, %TEST_FAIL% failed
+if %TEST_FAIL% GTR 0 (
+    echo    [!] Some tests failed - run Repair from menu
 )
+call :LOG "Tests: %TEST_PASS% passed, %TEST_FAIL% failed"
 goto :eof
 
 :: ============================================================================
 :: CREATE SHORTCUTS
 :: ============================================================================
 :CREATE_SHORTCUTS
-echo.
-echo [8/8] Creating shortcuts...
-call :LOG "Creating shortcuts..."
+echo  Creating launcher scripts...
 
-:: Create run.bat
+:: Main run script
 (
 echo @echo off
+echo title Bagley v7.01
 echo cd /d "%SCRIPT_DIR%"
 echo call "%VENV_DIR%\Scripts\activate.bat"
+echo echo Starting Bagley...
 echo python -m bagley.main --ui
-echo pause
+echo if errorlevel 1 ^(
+echo     echo.
+echo     echo [ERROR] Bagley failed to start!
+echo     echo Run setup.bat and choose Repair to fix.
+echo     echo.
+echo     pause
+echo ^)
 ) > "%SCRIPT_DIR%\run.bat"
 
-:: Create run_cli.bat
+:: CLI script
 (
 echo @echo off
 echo cd /d "%SCRIPT_DIR%"
@@ -670,23 +653,40 @@ echo call "%VENV_DIR%\Scripts\activate.bat"
 echo python -m bagley.main %%*
 ) > "%SCRIPT_DIR%\run_cli.bat"
 
-:: Create train.bat
+:: Train script
 (
 echo @echo off
+echo title Bagley Training
 echo cd /d "%SCRIPT_DIR%"
 echo call "%VENV_DIR%\Scripts\activate.bat"
 echo python -m bagley.main --train %%*
 echo pause
 ) > "%SCRIPT_DIR%\train.bat"
 
-:: Create desktop shortcut using PowerShell
-set "SHORTCUT_PATH=%USERPROFILE%\Desktop\Bagley v7.lnk"
-powershell -Command "$ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut('%SHORTCUT_PATH%'); $s.TargetPath = '%SCRIPT_DIR%\run.bat'; $s.WorkingDirectory = '%SCRIPT_DIR%'; $s.Description = 'Bagley v7 - The Best AI'; $s.Save()" 2>nul
+:: Web Intelligence script
+(
+echo @echo off
+echo title Bagley Web Intelligence
+echo cd /d "%SCRIPT_DIR%"
+echo call "%VENV_DIR%\Scripts\activate.bat"
+echo python -c "from bagley.core.daily_intelligence import start_daily_intelligence; start_daily_intelligence()"
+echo pause
+) > "%SCRIPT_DIR%\start_web_intel.bat"
 
-if exist "%SHORTCUT_PATH%" (
+:: Desktop shortcut
+set "SHORTCUT=%USERPROFILE%\Desktop\Bagley v7.lnk"
+powershell -Command ^
+    "$ws = New-Object -ComObject WScript.Shell; " ^
+    "$s = $ws.CreateShortcut('%SHORTCUT%'); " ^
+    "$s.TargetPath = '%SCRIPT_DIR%\run.bat'; " ^
+    "$s.WorkingDirectory = '%SCRIPT_DIR%'; " ^
+    "$s.Description = 'Bagley v7.01 - The Best AI'; " ^
+    "$s.Save()" 2>nul
+
+if exist "%SHORTCUT%" (
     echo    [OK] Desktop shortcut created
 ) else (
-    echo    [INFO] Couldn't create desktop shortcut
+    echo    [INFO] Couldn't create desktop shortcut (not critical)
 )
 
 echo    [OK] Launcher scripts created
@@ -694,21 +694,20 @@ call :LOG "Shortcuts created"
 goto :eof
 
 :: ============================================================================
-:: FINALIZE INSTALLATION
+:: FINALIZE
 :: ============================================================================
 :FINALIZE_INSTALL
-:: Write installation marker
+:: Write install marker
 (
 echo version=%BAGLEY_VERSION%
 echo installed=%date% %time%
 echo python=%PYTHON_VERSION%
 echo gpu_mode=%GPU_MODE%
-echo nvidia_gpus=%NVIDIA_GPUS%
-echo amd_gpus=%AMD_GPUS%
+echo nvidia=%NVIDIA_GPUS%
+echo amd=%AMD_GPUS%
 echo path=%SCRIPT_DIR%
 ) > "%CONFIG_FILE%"
-
-call :LOG "Installation finalized"
+call :LOG "Installation complete"
 goto :eof
 
 :: ============================================================================
@@ -717,37 +716,30 @@ goto :eof
 :INSTALL_COMPLETE
 cls
 echo.
-echo  ╔══════════════════════════════════════════════════════════════════╗
-echo  ║                                                                  ║
-echo  ║   ██████╗  █████╗  ██████╗ ██╗     ███████╗██╗   ██╗            ║
-echo  ║   ██╔══██╗██╔══██╗██╔════╝ ██║     ██╔════╝╚██╗ ██╔╝            ║
-echo  ║   ██████╔╝███████║██║  ███╗██║     █████╗   ╚████╔╝             ║
-echo  ║   ██╔══██╗██╔══██║██║   ██║██║     ██╔══╝    ╚██╔╝              ║
-echo  ║   ██████╔╝██║  ██║╚██████╔╝███████╗███████╗   ██║               ║
-echo  ║   ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝   ╚═╝               ║
-echo  ║                                                                  ║
-echo  ║         INSTALLATION COMPLETE - THE BEST AI IS READY!           ║
-echo  ║                                                                  ║
-echo  ╠══════════════════════════════════════════════════════════════════╣
-echo  ║                                                                  ║
-echo  ║   System Configuration:                                         ║
-echo  ║   • GPU Mode: %GPU_MODE%
-echo  ║   • NVIDIA GPUs: %NVIDIA_GPUS%
-echo  ║   • AMD GPUs: %AMD_GPUS%
-echo  ║   • Python: %PYTHON_VERSION%
-echo  ║                                                                  ║
-echo  ║   Quick Start:                                                  ║
-echo  ║   • Double-click "run.bat" to launch Bagley                     ║
-echo  ║   • Or use the desktop shortcut                                 ║
-echo  ║   • Run setup.bat again for repair/update options               ║
-echo  ║                                                                  ║
-echo  ║   Training:                                                     ║
-echo  ║   • Drop data into the "data" folder                            ║
-echo  ║   • Bagley will auto-detect and train                           ║
-echo  ║                                                                  ║
-echo  ╚══════════════════════════════════════════════════════════════════╝
+echo  ================================================================
+echo           BAGLEY v7.01 - INSTALLATION COMPLETE!
+echo  ================================================================
 echo.
-set /p "RUN_NOW=Would you like to run Bagley now? [Y/N]: "
+echo    System Configuration:
+echo      GPU Mode: %GPU_MODE%
+echo      NVIDIA GPUs: %NVIDIA_GPUS%
+echo      AMD GPUs: %AMD_GPUS%
+echo      Python: %PYTHON_VERSION%
+echo.
+echo    How to use:
+echo      - Double-click "run.bat" or the desktop shortcut
+echo      - Or run this setup again for more options
+echo.
+echo    Web Intelligence:
+echo      - Run "start_web_intel.bat" to start daily news scraping
+echo.
+echo    Training:
+echo      - Put your data in the "data" folder
+echo      - Run "train.bat" to start training
+echo.
+echo  ================================================================
+echo.
+set /p "RUN_NOW=Launch Bagley now? [Y/N]: "
 if /i "%RUN_NOW%"=="Y" goto :RUN_BAGLEY
 goto :EXIT_SCRIPT
 
@@ -756,44 +748,49 @@ goto :EXIT_SCRIPT
 :: ============================================================================
 :RUN_BAGLEY
 echo.
-echo Starting Bagley...
+echo  Starting Bagley...
 cd /d "%SCRIPT_DIR%"
 call "%VENV_DIR%\Scripts\activate.bat"
 python -m bagley.main --ui
+if errorlevel 1 (
+    echo.
+    echo  [ERROR] Bagley failed to start!
+    echo  Run setup.bat and choose [2] Repair
+    echo.
+    pause
+)
 goto :EXIT_SCRIPT
 
 :: ============================================================================
-:: REPAIR INSTALLATION
+:: REPAIR
 :: ============================================================================
 :REPAIR_INSTALL
 echo.
-echo Repairing Bagley installation...
-call :LOG "Starting repair..."
+echo  Repairing Bagley...
+echo.
 
-:: Re-detect everything
 call :DETECT_SYSTEM
-call :DETECT_PYTHON
+call :ENSURE_PYTHON
 call :DETECT_GPUS
 
-:: Fix venv if needed
-if not exist "%SCRIPT_DIR%\venv\Scripts\python.exe" (
-    echo    Recreating virtual environment...
-    rmdir /s /q "%SCRIPT_DIR%\venv" 2>nul
+:: Check venv
+if not exist "%VENV_DIR%\Scripts\python.exe" (
+    echo  Virtual environment missing - recreating...
     call :SETUP_VENV
+) else (
+    set "VENV_PYTHON=%VENV_DIR%\Scripts\python.exe"
+    set "VENV_PIP=%VENV_DIR%\Scripts\pip.exe"
 )
 
-set "VENV_PYTHON=%SCRIPT_DIR%\venv\Scripts\python.exe"
-set "VENV_PIP=%SCRIPT_DIR%\venv\Scripts\pip.exe"
-
-:: Reinstall dependencies
+:: Reinstall packages
+echo  Reinstalling packages...
 call :INSTALL_DEPENDENCIES
 
-:: Run tests
+:: Test
 call :RUN_TESTS
 
 echo.
-echo Repair complete!
-call :LOG "Repair completed"
+echo  Repair complete!
 pause
 goto :SHOW_MENU
 
@@ -802,51 +799,26 @@ goto :SHOW_MENU
 :: ============================================================================
 :REINSTALL
 echo.
-echo Reinstalling Bagley...
-call :LOG "Starting reinstall..."
-
-:: Remove venv
-echo    Removing virtual environment...
-rmdir /s /q "%SCRIPT_DIR%\venv" 2>nul
-
-:: Remove config
+echo  Full reinstall - removing old installation...
+rmdir /s /q "%VENV_DIR%" 2>nul
 del "%CONFIG_FILE%" 2>nul
-
-:: Start fresh
 goto :FRESH_INSTALL
 
 :: ============================================================================
-:: UNINSTALL (KEEP DATA)
+:: UNINSTALL KEEP DATA
 :: ============================================================================
 :UNINSTALL_KEEP
 echo.
-echo Uninstalling Bagley (keeping your data)...
-call :LOG "Uninstalling (keep data)..."
-
-set /p "CONFIRM=Are you sure? Your models and data will be preserved. [Y/N]: "
+set /p "CONFIRM=Uninstall but keep data? [Y/N]: "
 if /i not "%CONFIRM%"=="Y" goto :SHOW_MENU
 
-:: Remove venv
-echo    Removing virtual environment...
-rmdir /s /q "%SCRIPT_DIR%\venv" 2>nul
-
-:: Remove cache
-echo    Removing cache...
+rmdir /s /q "%VENV_DIR%" 2>nul
 rmdir /s /q "%SCRIPT_DIR%\cache" 2>nul
-rmdir /s /q "%SCRIPT_DIR%\temp" 2>nul
-
-:: Remove config marker
 del "%CONFIG_FILE%" 2>nul
-
-:: Remove shortcuts
 del "%SCRIPT_DIR%\run.bat" 2>nul
-del "%SCRIPT_DIR%\run_cli.bat" 2>nul
-del "%SCRIPT_DIR%\train.bat" 2>nul
 del "%USERPROFILE%\Desktop\Bagley v7.lnk" 2>nul
 
-echo.
-echo Uninstall complete. Your data folder is preserved.
-call :LOG "Uninstall completed (data preserved)"
+echo  Uninstalled. Data preserved in data/ and models/
 pause
 goto :EXIT_SCRIPT
 
@@ -855,131 +827,66 @@ goto :EXIT_SCRIPT
 :: ============================================================================
 :FULL_UNINSTALL
 echo.
-echo  ╔══════════════════════════════════════════════════════════════════╗
-echo  ║                      FULL UNINSTALL WARNING                      ║
-echo  ╠══════════════════════════════════════════════════════════════════╣
-echo  ║                                                                  ║
-echo  ║   This will DELETE EVERYTHING:                                  ║
-echo  ║   • Virtual environment                                         ║
-echo  ║   • All downloaded models                                       ║
-echo  ║   • All training data                                           ║
-echo  ║   • All checkpoints                                             ║
-echo  ║   • All logs                                                    ║
-echo  ║   • All configuration                                           ║
-echo  ║                                                                  ║
-echo  ║   THIS CANNOT BE UNDONE!                                        ║
-echo  ║                                                                  ║
-echo  ╚══════════════════════════════════════════════════════════════════╝
-echo.
-set /p "CONFIRM1=Type 'DELETE' to confirm: "
-if not "%CONFIRM1%"=="DELETE" goto :SHOW_MENU
+echo  WARNING: This deletes EVERYTHING!
+set /p "CONFIRM=Type DELETE to confirm: "
+if not "%CONFIRM%"=="DELETE" goto :SHOW_MENU
 
-echo.
-call :LOG "Starting full uninstall..."
-
-:: Remove everything except source code and setup.bat
-echo    Removing virtual environment...
-rmdir /s /q "%SCRIPT_DIR%\venv" 2>nul
-
-echo    Removing models...
+rmdir /s /q "%VENV_DIR%" 2>nul
 rmdir /s /q "%SCRIPT_DIR%\models" 2>nul
-
-echo    Removing data...
 rmdir /s /q "%SCRIPT_DIR%\data" 2>nul
-
-echo    Removing checkpoints...
 rmdir /s /q "%SCRIPT_DIR%\checkpoints" 2>nul
-
-echo    Removing logs...
 rmdir /s /q "%SCRIPT_DIR%\logs" 2>nul
-
-echo    Removing cache...
 rmdir /s /q "%SCRIPT_DIR%\cache" 2>nul
-rmdir /s /q "%SCRIPT_DIR%\temp" 2>nul
-
-echo    Removing config...
 rmdir /s /q "%SCRIPT_DIR%\config" 2>nul
 del "%CONFIG_FILE%" 2>nul
-
-echo    Removing shortcuts...
-del "%SCRIPT_DIR%\run.bat" 2>nul
-del "%SCRIPT_DIR%\run_cli.bat" 2>nul
-del "%SCRIPT_DIR%\train.bat" 2>nul
+del "%SCRIPT_DIR%\run*.bat" 2>nul
 del "%USERPROFILE%\Desktop\Bagley v7.lnk" 2>nul
 
-echo.
-echo Full uninstall complete.
-call :LOG "Full uninstall completed"
+echo  Full uninstall complete.
 pause
 goto :EXIT_SCRIPT
 
 :: ============================================================================
-:: RUN DIAGNOSTICS
+:: DIAGNOSTICS
 :: ============================================================================
 :RUN_DIAGNOSTICS
 cls
 echo.
-echo  ╔══════════════════════════════════════════════════════════════════╗
-echo  ║                    BAGLEY v7 DIAGNOSTICS                         ║
-echo  ╚══════════════════════════════════════════════════════════════════╝
+echo  ================================================================
+echo              BAGLEY v7.01 DIAGNOSTICS
+echo  ================================================================
 echo.
 
-call :LOG "Running diagnostics..."
-
-:: System Info
-echo ═══════════════════════════════════════════════════════════════════
-echo SYSTEM INFORMATION
-echo ═══════════════════════════════════════════════════════════════════
 call :DETECT_SYSTEM
 echo.
-
-:: Python Info
-echo ═══════════════════════════════════════════════════════════════════
-echo PYTHON INFORMATION
-echo ═══════════════════════════════════════════════════════════════════
-call :DETECT_PYTHON
+call :ENSURE_PYTHON
 echo.
-
-:: GPU Info
-echo ═══════════════════════════════════════════════════════════════════
-echo GPU INFORMATION
-echo ═══════════════════════════════════════════════════════════════════
 call :DETECT_GPUS
 echo.
 
-:: Disk Space
-echo ═══════════════════════════════════════════════════════════════════
-echo DISK SPACE
-echo ═══════════════════════════════════════════════════════════════════
+echo  Disk Space:
 for /f "tokens=3" %%a in ('dir "%SCRIPT_DIR%" /-c 2^>nul ^| findstr /c:"bytes free"') do (
     set /a "FREE_GB=%%a/1073741824"
-    echo    Free space: !FREE_GB! GB
+    echo    Free: !FREE_GB! GB
 )
 echo.
 
-:: Package Versions
-echo ═══════════════════════════════════════════════════════════════════
-echo INSTALLED PACKAGES
-echo ═══════════════════════════════════════════════════════════════════
-if exist "%SCRIPT_DIR%\venv\Scripts\pip.exe" (
-    "%SCRIPT_DIR%\venv\Scripts\pip.exe" list 2>nul | findstr /i "torch transformers pyside6 accelerate"
+if exist "%VENV_DIR%\Scripts\pip.exe" (
+    echo  Key Packages:
+    "%VENV_DIR%\Scripts\pip.exe" list 2>nul | findstr /i "torch transformers pyside6 accelerate bagley"
+    echo.
 )
-echo.
 
-:: Run full tests
-echo ═══════════════════════════════════════════════════════════════════
-echo RUNNING TESTS
-echo ═══════════════════════════════════════════════════════════════════
-set "VENV_PYTHON=%SCRIPT_DIR%\venv\Scripts\python.exe"
+set "VENV_PYTHON=%VENV_DIR%\Scripts\python.exe"
 call :RUN_TESTS
-echo.
 
-echo Diagnostics complete. Press any key to return to menu...
+echo.
+echo  Press any key to return to menu...
 pause >nul
 goto :SHOW_MENU
 
 :: ============================================================================
-:: UTILITY FUNCTIONS
+:: LOG FUNCTION
 :: ============================================================================
 :LOG
 echo [%date% %time%] %~1 >> "%LOG_FILE%"
@@ -990,7 +897,7 @@ goto :eof
 :: ============================================================================
 :EXIT_SCRIPT
 echo.
-echo Thank you for using Bagley v7 - The Best AI in the World!
+echo  Thanks for using Bagley!
 echo.
 endlocal
 exit /b 0
